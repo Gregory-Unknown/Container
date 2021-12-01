@@ -1,30 +1,15 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-<<<<<<< HEAD
 #include "vector_iterator.hpp"
 #include <memory>
 #include <stdexcept>
 #include <exception>
 
-=======
-#include "my_iterator.hpp"
-# include <iostream>
-# include <cstddef>   // size_t, ptrdiff_t ...
-# include <cstring>   // memcpy();
-# include <memory>    // allocator
-# include <cstddef>   // ptrdiff_t
-# include <limits>    // std::numeric_limits
-# include <exception>
-# include <memory>
-# include <stdexcept>
->>>>>>> f2450b805165ef18874b88f39f10050afbffeaf5
-
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
 	class vector {
 		public:
-<<<<<<< HEAD
 			typedef T															value_type;
 			typedef Alloc														allocator_type;
 			typedef typename allocator_type::reference							reference;
@@ -37,20 +22,6 @@ namespace ft {
 			typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
 			typedef typename iterator_traits<iterator>::difference_type			difference_type;
 			typedef size_t														size_type;
-=======
-			typedef T																	value_type;
-			typedef Alloc																allocator_type;
-			typedef typename allocator_type::reference									reference;
-			typedef typename allocator_type::const_reference							const_reference;
-			typedef typename allocator_type::pointer									pointer;
-			typedef typename allocator_type::const_pointer								const_pointer;
-			typedef vector_iterator <value_type, value_type*, value_type&>				iterator;
-			typedef vector_iterator <value_type, const value_type*, const value_type&>	const_iterator;
-			// typedef ft::vector_reverse_iterator<iterator>							reverse_iterator;
-			// typedef ft::vector_reverse_iterator<const_iterator>						const_reverse_iterator;
-			typedef typename iterator_traits<iterator>::difference_type					difference_type;
-			typedef size_t																size_type;
->>>>>>> f2450b805165ef18874b88f39f10050afbffeaf5
 		private:
 			pointer			m_data;
 			pointer			m_begin;
@@ -83,7 +54,7 @@ namespace ft {
 				std::cout << m_size << std::endl;
 			}
 			template <class InputIterator>
-			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if < !ft::numeric_limits<InputIterator>::is_specialized >::type* = 0)
+			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if < !std::numeric_limits<InputIterator>::is_specialized >::type* = 0)
 			: m_data(0), m_begin(0), m_capacity(0), m_size(0), m_alloc(alloc)
 			{
 				m_size = m_capacity = std::distance(first, last);
