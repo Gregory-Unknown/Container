@@ -32,9 +32,7 @@ namespace ft {
 			explicit vector (const allocator_type& alloc = allocator_type())
 			: m_data(0), m_begin(0), m_capacity(0), m_size(0), m_alloc(alloc)
 			{
-				std::cout << m_data << std::endl;
-				std::cout << m_capacity << std::endl;
-				std::cout << m_size << std::endl;
+
 			}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			: m_data(0), m_begin(0), m_capacity(n), m_size(n), m_alloc(alloc)
@@ -49,9 +47,6 @@ namespace ft {
 				for (size_t i = 0; i < n; ++i) {
 					m_alloc.construct(m_data + i, val);
 				}
-				std::cout << m_data << std::endl;
-				std::cout << m_capacity << std::endl;
-				std::cout << m_size << std::endl;
 			}
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if < !std::numeric_limits<InputIterator>::is_specialized >::type* = 0)
@@ -84,7 +79,7 @@ namespace ft {
 					m_alloc.construct(m_data + i, x[i]);
 				}
 			}
-			~vector()
+			virtual ~vector()
 			{
 				if (m_begin) {
 					for (size_t i = 0; i < m_size; ++i) {
@@ -97,27 +92,107 @@ namespace ft {
 					m_capacity = 0;
 				}
 			}
-
-			iterator begin();
+			vector &operator=(const vector &vec)
+			{
+				if (this != &vec) {
+					this->vector();
+					m_alloc= vec.m_alloc;
+					m_data = m_alloc.allocate(vec.m_capacity);
+					for (size_type i = 0; i < vec.m_size; ++i) {
+						m_alloc.construct(m_data + i, vec[i]);
+					}
+					m_begin = m_data;
+					m_size = vec.m_size;
+					m_capacity = vec.m_capacity;
+					return (*this);
+				}
+			}
+			iterator begin()
+			{
+				return (iterartor(m_data));
+			}
 			const_iterator begin() const;
-			iterator end();
-			const_iterator end() const;
-			reverse_iterator rbegin();
-			const_reverse_iterator rbegin() const;
-			size_type size() const;
-			size_type max_size() const;
+			{
+				return (const_iterartor(m_data));
+			}
+			iterator end()
+			{
+				return (iterartor(m_data + m_size));
+			}
+			const_iterator end() const
+			{
+				return (const_iterartor(m_data + m_size));
+			}
+			reverse_iterator rbegin()
+			{
+				return (reverse_iterartor(end()));
+			}
+			const_reverse_iterator rbegin() const
+			{
+				return (const_reverse_iterartor(end()));
+			}
+			iterator rend()
+			{
+				return (reverse_iterartor(begin()));
+			}
+			const_iterator rend() const
+			{
+				return (const_reverse_iterartor(begin()));
+			}
+			size_type size() const
+			{
+				return (m_size);
+			}
+			size_type max_size() const
+			{
+				return (m_alloc.max_size());
+			}
 			void resize (size_type n, value_type val = value_type());
-			size_type capacity() const;
-			bool empty() const;
+			size_type capacity() const
+			{
+				return (m_capacity);
+			}
+			bool empty() const
+			{
+				return (m_size == 0);
+			}
 			void reserve (size_type n);
-			reference operator[] (size_type n);
-			const_reference operator[] (size_type n) const;
-			reference at (size_type n);
-			const_reference at (size_type n) const;
-			reference front();
-			const_reference front() const;
-			reference back();
-			const_reference back() const;
+			reference operator[] (size_type n)
+			{
+				return (m_data[n]);
+			}
+			const_reference operator[] (size_type n) const
+			{
+				return (m_data[n]);
+			}
+			reference at (size_type n)
+			{
+				if (n > m_size)
+					throw std::out_of_range("Out of Range error: vector");
+				return (m_data[n]);
+			}
+			const_reference at (size_type n) const
+			{
+				if (n > m_size)
+					throw std::out_of_range("Out of Range error: vector");
+				return (m_data[n]);
+			}
+			reference front()
+			{
+				return (m_data[0]);
+			}
+			const_reference front() const
+			{
+				return (m_data[0]);
+			}
+			reference back()
+			{
+				return (m_data[m_size - 1]);
+			}
+			const_reference back() const
+			{
+				return (m_data[m_size - 1]);
+			}
 			template <class InputIterator>
 			void assign (InputIterator first, InputIterator last);
 			void assign (size_type n, const value_type& val);
