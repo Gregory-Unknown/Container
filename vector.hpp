@@ -5,6 +5,8 @@
 #include <memory>
 #include <stdexcept>
 #include <exception>
+#include <cstdint>
+# include <cstddef>
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
@@ -44,7 +46,7 @@ namespace ft {
 					throw ;
 				}
 				m_begin = m_data;
-				for (size_t i = 0; i < n; ++i) {
+				for (size_type i = 0; i < n; ++i) {
 					m_alloc.construct(m_data + i, val);
 				}
 			}
@@ -75,14 +77,14 @@ namespace ft {
 					throw ;
 				}
 				m_begin = m_data;
-				for (size_t i = 0; i < m_size; ++i) {
+				for (size_type i = 0; i < m_size; ++i) {
 					m_alloc.construct(m_data + i, x[i]);
 				}
 			}
 			virtual ~vector()
 			{
 				if (m_begin) {
-					for (size_t i = 0; i < m_size; ++i) {
+					for (size_type i = 0; i < m_size; ++i) {
 						m_alloc.destroy(m_data + i);
 					}
 					m_alloc.deallocate(m_begin, m_capacity);
@@ -109,35 +111,35 @@ namespace ft {
 			}
 			iterator begin()
 			{
-				return (iterartor(m_data));
+				return (iterator(m_data));
 			}
-			const_iterator begin() const;
+			const_iterator begin() const
 			{
-				return (const_iterartor(m_data));
+				return (const_iterator(m_data));
 			}
 			iterator end()
 			{
-				return (iterartor(m_data + m_size));
+				return (iterator(m_data + m_size));
 			}
 			const_iterator end() const
 			{
-				return (const_iterartor(m_data + m_size));
+				return (const_iterator(m_data + m_size));
 			}
 			reverse_iterator rbegin()
 			{
-				return (reverse_iterartor(end()));
+				return (reverse_iterator(end()));
 			}
 			const_reverse_iterator rbegin() const
 			{
-				return (const_reverse_iterartor(end()));
+				return (const_reverse_iterator(end()));
 			}
 			iterator rend()
 			{
-				return (reverse_iterartor(begin()));
+				return (reverse_iterator(begin()));
 			}
 			const_iterator rend() const
 			{
-				return (const_reverse_iterartor(begin()));
+				return (const_reverse_iterator(begin()));
 			}
 			size_type size() const
 			{
@@ -147,7 +149,42 @@ namespace ft {
 			{
 				return (m_alloc.max_size());
 			}
-			void resize (size_type n, value_type val = value_type());
+			void resize (size_type n, value_type val = value_type())
+			{
+				size_type i = 0;
+				if (m_size >= n) {
+					for (i = n; i < m_size; ++i) {
+						m_alloc.destroy(m_data + i);
+					}
+					m_size = n;
+					return ;
+				}
+				if (m_capacity > n) {
+					for (i = n; i < m_size; ++i) {
+						m_alloc.construct(m_data + i, val);
+					}
+					m_size = n;
+					return ;
+				}
+				pointer newdata;
+				try {
+					newdata = m_alloc.allocate(n);
+				} catch(std::bad_alloc &e) {
+					throw ;
+				}
+				for (i = 0; i < m_size; ++i) {
+					newdata[i] = m_data[i];
+				}
+				for (; i < n; ++i) {
+					m_alloc.construct(newdata + i, val);
+				}
+				if (m_begin)
+					m_alloc.deallocate(m_begin, m_capacity);
+				m_data = newdata;
+				m_begin = newdata;
+				m_size = n;
+				m_capacity = n;
+			}
 			size_type capacity() const
 			{
 				return (m_capacity);
@@ -156,7 +193,19 @@ namespace ft {
 			{
 				return (m_size == 0);
 			}
-			void reserve (size_type n);
+			void reserve (size_type n)
+			{
+				if (n <= m_capacity) return ;
+				pointer newdata = m_alloc.allocate(n);
+				for (size_type i = 0; i < m_size; ++i) {
+					newdata[i] = m_data[i];
+				}
+				if (m_begin)
+					m_alloc.deallocate(m_begin, m_capacity);
+				m_data = newdata;
+				m_begin = newdata;
+				m_capacity = n;
+			}
 			reference operator[] (size_type n)
 			{
 				return (m_data[n]);
@@ -194,19 +243,176 @@ namespace ft {
 				return (m_data[m_size - 1]);
 			}
 			template <class InputIterator>
-			void assign (InputIterator first, InputIterator last);
-			void assign (size_type n, const value_type& val);
-			void push_back (const value_type& val);
-			void pop_back();
-			iterator insert (iterator position, const value_type& val);
-			void insert (iterator position, size_type n, const value_type& val);
+			void assign (InputIterator first, InputIterator last)
+			{
+				difference_type new_size = std::distance(first, last);
+				if (new_size < 0 ) {
+					this->~Vector();
+					throw ;
+				}
+				vector save(first, last);
+				this->clear();
+				this->reserve(new_size);
+				this->insert(this->begin(), save.begin(), save.end());
+			}
+			void assign (size_type n, const value_type& val)
+			{
+				value_type save(val);
+				clear();
+				reserve(n);
+				insert(begin(), n, save);
+			}
+			void push_back (const value_type& val)
+			{
+				insert(end(), val);
+			}
+			void pop_back()
+			{
+				m_alloc.destroy(m_data + m_size - 1);
+				--m_size;
+			}
+			iterator insert (iterator position, const value_type& val)
+			{
+				size_type tmp = position - this->begin();
+				this->insert(position, 1, val);
+				return (iterator(m_data + tmp));
+
+			}
+			void insert (iterator position, size_type n, const value_type& val)
+			{
+				size_type tmp = position - this->begin();
+
+				// m_capacity >= m_size + n example: [1,2,3,.,.,.] <-- 5 between 1, 2
+				if (m_capacity >= m_size + n) {
+					size_type last = (m_size == 0) ? 0 : m_size - 1;
+
+					// moving [1,2,3,.,.,.] ----> [1,.,2,3,.,.]
+					for (size_type i = tmp; i < m_size; ++i, --last) {
+						memmove(m_data + last + n, m_data + last, sizeof(value_type));
+					}
+					// adding 5: [1,.,2,3,.,.] ----> [1,5,2,3,.,.];
+					for (size_type i = 0; i < n; ++i) {
+						m_alloc.construct(m_data + tmp + i, val);
+					}
+					m_size += n;
+					return iterator(m_data + tmp);
+				}
+				// m_capacity < m_size + n: allocate new memory
+				size_type new_capacity = m_capacity * 2;
+
+				if (new_capacity < m_size + n) {
+					new_capacity = m_size + n;
+				}
+
+				value_type      save_val(val);
+				difference_type save_pos(position - this->begin());
+
+				this->reserve(new_capacity);
+				this->insert(iterator(m_data + save_pos), n, save_val);
+				return iterator(m_data + tmp);
+			}
 			template <class InputIterator>
-			void insert (iterator position, InputIterator first, InputIterator last);
-			iterator erase (iterator position);
-			iterator erase (iterator first, iterator last);
-			void swap (vector& x);
-			void clear();
-			allocator_type get_allocator() const;
+			void insert (iterator position, InputIterator first, InputIterator last)
+			{
+				difference_type n = std::distance(first, last);
+				difference_type tmp = position - this->begin();
+
+				if (n <= 0) {
+					return ;
+				}
+				// m_capacity >= m_size + n: just adding elements.
+				if (m_capacity >= m_size + n) {
+					while (first != last) {
+						insert(position, *first);
+						++first;
+						++position;
+					}
+					return ;
+				}
+
+				// m_capacity < m_size + n: allocate new memory
+				pointer newdata;
+				size_type  new_capacity = m_capacity * 2;
+
+				if (m_size + n > new_capacity) {
+					new_capacity = m_size + n;
+				}
+
+				newdata = m_alloc.allocate(new_capacity);
+
+				memmove(newdata, m_data, sizeof(value_type) * tmp);
+				std::copy(first, last, newdata + tmp);
+				memmove(
+				newdata + tmp + n,
+				m_data + tmp,
+				sizeof(value_type) * (m_size - tmp)
+				);
+				if (m_begin != 0) {
+					m_alloc.deallocate(m_begin, m_capacity);
+				}
+				m_size += n;
+				m_data = newdata;
+				m_begin = newdata;
+				m_capacity = new_capacity;
+			}
+			iterator erase (iterator position)
+			{
+				difference_type index = position - this->begin();
+
+				if (m_size == 0) {
+					return iterator(m_data + index);
+				}
+
+				m_alloc.destroy(m_data + index);
+				--m_size;
+				memmove
+				(
+				m_data + index,
+				m_data + index + 1,
+				sizeof(value_type) * (m_size - index)
+				);
+				return iterator(m_data + index);
+			}
+			iterator erase (iterator first, iterator last)
+			{
+				size_type start = first - this->begin();
+
+				while (first != last) {
+					this->erase(first);
+					--last;
+				}
+				return iterator(m_data + start);
+			}
+			void swap (vector& x)
+			{
+				allocator_type alloc_tmp = m_alloc;
+				size_type cap_tmp = m_capacity;
+				size_type size_tmp = m_size;
+				pointer data_tmp = m_data;
+
+				m_alloc = x.m_alloc;
+				m_capacity = x.m_capacity;
+				m_size = x.m_size;
+				m_data = x.m_data;
+
+				x.m_alloc = alloc_tmp;
+				x.m_capacity = cap_tmp;
+				x.m_size = size_tmp;
+				x.m_data = data_tmp;
+			}
+			void clear()
+			{
+				if (m_begin != 0) {
+					for (size_type i = 0; i < m_size; ++i) {
+						m_alloc.destroy(m_data + i);
+					}
+				}
+				m_size = 0;
+			}
+			allocator_type get_allocator() const
+			{
+				return (m_alloc);
+			}
 	};
 }
 #endif

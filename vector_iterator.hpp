@@ -35,7 +35,7 @@ namespace ft {
 		{
 
 		}
-		pointer	geter()
+		pointer	geter() const
 		{
 			return (m_p);
 		}
