@@ -3,11 +3,11 @@
 
 int main() {
 	ft::vector<int> v1;
-	ft::vector<int> v2(5);
+	ft::vector<int> v2(10);
 	for (size_t i = 0; i < 5; ++i) {
-		v2.push_back(i * 1000);
+		v1.push_back(i * 1000);
 	}
-	ft::vector<int> v3 = v2;
+	ft::vector<int> v3 = v1;
 	ft::vector<int>::iterator it;
 	int i = 0;
 	for (it = v3.begin(); it != v3.end(); ++it, ++i)
