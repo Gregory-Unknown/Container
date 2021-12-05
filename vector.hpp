@@ -5,8 +5,10 @@
 #include <memory>
 #include <stdexcept>
 #include <exception>
-#include <cstdint>
-# include <cstddef>
+// #include <cstdint>
+#include <cstddef>
+#include <cstring>
+#include <limits>
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
@@ -37,9 +39,9 @@ namespace ft {
 				reserve(10);
 			}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
-			: m_data(0), m_begin(0), m_capacity(n), m_size(n), m_alloc(alloc)
+			: m_data(0), m_begin(0), m_capacity(2 * n), m_size(n), m_alloc(alloc)
 			{
-				reserve(n);
+				m_data = m_alloc.allocate(m_capacity);
 				for (size_type i = 0; i < n; ++i) {
 					m_alloc.construct(m_data + i, val);
 				}
@@ -77,7 +79,7 @@ namespace ft {
 			}
 			virtual ~vector()
 			{
-				if (m_begin) {
+				if (m_data) {
 					for (size_type i = 0; i < m_size; ++i) {
 						m_alloc.destroy(m_data + i);
 					}
@@ -91,7 +93,7 @@ namespace ft {
 			vector &operator=(const vector &vec)
 			{
 				if (this != &vec) {
-					this->vector();
+					this->~vector();
 					m_alloc = vec.m_alloc;
 					m_data = m_alloc.allocate(vec.m_capacity);
 					for (size_type i = 0; i < vec.m_size; ++i) {
@@ -145,19 +147,18 @@ namespace ft {
 			}
 			void resize (size_type n, value_type val = value_type())
 			{
-				pointer newdata = m_alloc.allocate(n * 2);
-				try {
-					std::uninitialized_copy(m_data, m_data + n, newdata);
-				} catch (...) {
-					m_alloc.deallocate(newdata, n);
-					throw;
+				if (n > m_capacity) {
+					if (m_capacity * 2 > n)
+						reserve(m_capacity * 2);
+					else
+						reserve(n);
 				}
-				for (size_type i = 0; i < m_size; ++i) {
+				for (size_type i = m_size; i < n; ++i) {
+					m_alloc.construct(m_data + i, val);
+				}
+				for (size_type i = n; i < m_size; ++i) {
 					m_alloc.destroy(m_data + i);
 				}
-				m_alloc.deallocate(m_data);
-				m_data = newdata;
-				m_capacity = n;
 				m_size = n;
 			}
 			size_type capacity() const
@@ -172,6 +173,9 @@ namespace ft {
 			{
 				if (n <= m_capacity) return ;
 				pointer newdata = m_alloc.allocate(n);
+				// for (size_type i = 0; i < m_size; ++i) {
+				// 	m_alloc.construct(newdata + i, m_data[i]);
+				// }
 				try {
 					std::uninitialized_copy(m_data, m_data + m_size, newdata);
 				} catch (...) {
@@ -181,7 +185,7 @@ namespace ft {
 				for (size_type i = 0; i < m_size; ++i) {
 					m_alloc.destroy(m_data + i);
 				}
-				m_alloc.deallocate(m_data);
+				m_alloc.deallocate(m_data, m_capacity);
 				m_data = newdata;
 				m_capacity = n;
 			}
@@ -226,7 +230,7 @@ namespace ft {
 			{
 				difference_type new_size = std::distance(first, last);
 				if (new_size < 0 ) {
-					~Vector();
+					this->~Vector();
 					throw ;
 				}
 				vector save(first, last);
@@ -274,7 +278,8 @@ namespace ft {
 						m_alloc.construct(m_data + tmp + i, val);
 					}
 					m_size += n;
-					return iterator(m_data + tmp);
+					iterator(m_data + tmp);
+					return ;
 				}
 				// m_capacity < m_size + n: allocate new memory
 				size_type new_capacity = m_capacity * 2;
@@ -288,7 +293,7 @@ namespace ft {
 
 				reserve(new_capacity);
 				insert(iterator(m_data + save_pos), n, save_val);
-				return iterator(m_data + tmp);
+				iterator(m_data + tmp);
 			}
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last)
@@ -396,7 +401,7 @@ namespace ft {
 				try {
 					std::uninitialized_copy(m_data, m_data + m_size, newdata);
 				} catch (...) {
-					m_alloc.deallocate(newdata, n);
+					m_alloc.deallocate(newdata, new_cap);
 					throw;
 				}
 				for (size_type i = 0; i < m_size; ++i) {
