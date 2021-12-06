@@ -2,13 +2,17 @@
 #define VECTOR_HPP
 
 #include "vector_iterator.hpp"
+// #include "Iterator.hpp"
 #include <memory>
 #include <stdexcept>
 #include <exception>
-// #include <cstdint>
 #include <cstddef>
 #include <cstring>
 #include <limits>
+
+namespace ft {
+	template<class T, class Alloc> class vector;
+};
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
@@ -258,82 +262,45 @@ namespace ft {
 			{
 				size_type tmp = position - begin();
 				insert(position, 1, val);
+				for (iterator it = begin(); it < end(); it++)
+						std::cout << ' ' << *it;
+				std::cout << '\n';
 				return (iterator(m_data + tmp));
 
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
-				size_type tmp = position - begin();
-
-				// m_capacity >= m_size + n example: [1,2,3,.,.,.] <-- 5 between 1, 2
-				if (m_capacity >= m_size + n) {
-					size_type last = (m_size == 0) ? 0 : m_size - 1;
-
-					// moving [1,2,3,.,.,.] ----> [1,.,2,3,.,.]
-					for (size_type i = tmp; i < m_size; ++i, --last) {
-						memmove(m_data + last + n, m_data + last, sizeof(value_type));
-					}
-					// adding 5: [1,.,2,3,.,.] ----> [1,5,2,3,.,.];
-					for (size_type i = 0; i < n; ++i) {
-						m_alloc.construct(m_data + tmp + i, val);
-					}
-					m_size += n;
-					iterator(m_data + tmp);
-					return ;
+				difference_type tmp = position - begin();
+				if (m_capacity >= m_size + n)
+					reserve(std::max(m_size * 2, m_size + n));
+				position = begin() + tmp;
+				for (iterator tmp_end = end() + n - 1; tmp_end >= position + n - 1; --tmp_end) {
+					m_alloc.construct(tmp_end.geter(), *(tmp_end - n));
+					m_alloc.destroy(tmp_end.geter() - n);
 				}
-				// m_capacity < m_size + n: allocate new memory
-				size_type new_capacity = m_capacity * 2;
-
-				if (new_capacity < m_size + n) {
-					new_capacity = m_size + n;
+				for (iterator tmp_end = position + n - 1; tmp_end >= position; --tmp_end) {
+					m_alloc.construct(tmp_end.geter(), val);
 				}
-
-				value_type      save_val(val);
-				difference_type save_pos(position - begin());
-
-				reserve(new_capacity);
-				insert(iterator(m_data + save_pos), n, save_val);
-				iterator(m_data + tmp);
 			}
 			template <class InputIterator>
-			void insert (iterator position, InputIterator first, InputIterator last)
+			void insert (iterator position, InputIterator first, InputIterator last,
+					typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0)
 			{
-				difference_type n = std::distance(first, last);
+				// difference_type n = ft::distance(first, last);
 				difference_type tmp = position - begin();
+				size_type n = 0;
+				for (InputIterator it = first; it != last; ++it, ++n) {
 
-				if (n <= 0) {
-					return ;
 				}
-				// m_capacity >= m_size + n: just adding elements.
-				if (m_capacity >= m_size + n) {
-					while (first != last) {
-						insert(position, *first);
-						++first;
-						++position;
-					}
-					return ;
+				if (m_capacity < m_size + n)
+					reserve(std::max(m_size * 2, m_size + n));
+				position = begin() + tmp;
+				for (iterator tmp_iter = end() - 1; position <= tmp_iter; --tmp_iter)
+					*(tmp_iter + n) = *tmp_iter;
+				for (iterator tmp_iter = position; position + n > tmp_iter; ++tmp_iter, ++first) {
+					m_alloc.construct(tmp_iter.geter(), *first);
 				}
-
-				// m_capacity < m_size + n: allocate new memory
-				pointer newdata;
-				size_type  new_capacity = m_capacity * 2;
-
-				if (m_size + n > new_capacity) {
-					new_capacity = m_size + n;
-				}
-
-				newdata = m_alloc.allocate(new_capacity);
-
-				memmove(newdata, m_data, sizeof(value_type) * tmp);
-				std::copy(first, last, newdata + tmp);
-				memmove(newdata + tmp + n, m_data + tmp, sizeof(value_type) * (m_size - tmp));
-				if (m_begin != 0) {
-					m_alloc.deallocate(m_begin, m_capacity);
-				}
-				m_size += n;
-				m_data = newdata;
-				m_begin = newdata;
-				m_capacity = new_capacity;
+				m_size = size() + n;
 			}
 			iterator erase (iterator position)
 			{
