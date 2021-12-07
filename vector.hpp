@@ -54,17 +54,21 @@ namespace ft {
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if < !std::numeric_limits<InputIterator>::is_specialized >::type* = 0)
 			: m_data(0), m_begin(0), m_capacity(0), m_size(0), m_alloc(alloc)
 			{
-				m_size = m_capacity = std::distance(first, last);
+				size_type count = 0;
+				for (InputIterator it = first; it != last; it++, count++) ;
+
+				m_size = m_capacity = count;
+				std::cout << "M_SIZE     : " << m_size << std::endl;
+				std::cout << "M_CAPACITY : " << m_capacity << std::endl;
 				try {
-					m_data = m_alloc.allocate(m_size);
+					m_data = m_alloc.allocate(m_capacity * 2);
 				} catch (std::bad_alloc &e) {
 					this->~vector();
 					throw ;
 				}
 				m_begin = m_data;
-				for (int i = 0; i < m_size; ++i) {
+				for (size_type i = 0; i < m_size; ++i, ++first) {
 					m_alloc.construct(m_data + i, *first);
-					++first;
 				}
 			}
 			vector (const vector& x)
@@ -106,8 +110,8 @@ namespace ft {
 					m_begin = m_data;
 					m_size = vec.m_size;
 					m_capacity = vec.m_capacity;
-					return (*this);
 				}
+				return (*this);
 			}
 			iterator begin()
 			{
@@ -262,44 +266,42 @@ namespace ft {
 			{
 				size_type tmp = position - begin();
 				insert(position, 1, val);
-				for (iterator it = begin(); it < end(); it++)
-						std::cout << ' ' << *it;
-				std::cout << '\n';
 				return (iterator(m_data + tmp));
 
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
 				difference_type tmp = position - begin();
+				if (tmp < 0 || n == 0) return ;
 				if (m_capacity >= m_size + n)
 					reserve(std::max(m_size * 2, m_size + n));
 				position = begin() + tmp;
-				for (iterator tmp_end = end() + n - 1; tmp_end >= position + n - 1; --tmp_end) {
-					m_alloc.construct(tmp_end.geter(), *(tmp_end - n));
-					m_alloc.destroy(tmp_end.geter() - n);
+				for (iterator iter = end() + n - 1; iter >= position + n; --iter) {
+					m_alloc.construct(iter.geter(), *(iter - n));
+					m_alloc.destroy(iter.geter() - n);
 				}
-				for (iterator tmp_end = position + n - 1; tmp_end >= position; --tmp_end) {
-					m_alloc.construct(tmp_end.geter(), val);
+				for (iterator iter = position + n - 1; iter >= position; --iter) {
+					m_alloc.construct(iter.geter(), val);
 				}
+				m_size += n;
 			}
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last,
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0)
 			{
-				// difference_type n = ft::distance(first, last);
-				difference_type tmp = position - begin();
-				size_type n = 0;
-				for (InputIterator it = first; it != last; ++it, ++n) {
 
-				}
+				difference_type n = last - first;
+
+				difference_type tmp = position - begin();
+
 				if (m_capacity < m_size + n)
 					reserve(std::max(m_size * 2, m_size + n));
+
 				position = begin() + tmp;
 				for (iterator tmp_iter = end() - 1; position <= tmp_iter; --tmp_iter)
 					*(tmp_iter + n) = *tmp_iter;
-				for (iterator tmp_iter = position; position + n > tmp_iter; ++tmp_iter, ++first) {
+				for (iterator tmp_iter = position; position + n > tmp_iter; ++first, ++tmp_iter)
 					m_alloc.construct(tmp_iter.geter(), *first);
-				}
 				m_size = size() + n;
 			}
 			iterator erase (iterator position)
@@ -325,7 +327,7 @@ namespace ft {
 				size_type start = first - this->begin();
 
 				while (first != last) {
-					this->erase(first);
+					erase(first);
 					--last;
 				}
 				return iterator(m_data + start);

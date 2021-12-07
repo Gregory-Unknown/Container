@@ -4,77 +4,186 @@
 #include <iterator>
 #include <ctime>
 
-     // начальное время
-    // здесь должен быть фрагмент кода, время выполнения которого нужно измерить
-     // конечное время
-     // искомое время
+void ft_constructor()
+{
+	// constructors used in the same order as described above:
+	std::vector<int> std_first;                                // empty vector of ints
+	std::vector<int> std_second (4,100);                       // four ints with value 100
+	std::vector<int> std_third (std_second.begin(),std_second.end());  // iterating through second
+	std::vector<int> std_fourth (std_third);                       // a copy of third
 
-int main() {
+	// the iterator constructor can also be used to construct from arrays:
+	int std_ints[] = {16,2,77,29};
+	std::vector<int> std_fifth (std_ints, std_ints + sizeof(std_ints) / sizeof(int) );
 
-
-	ft::vector<int> myvector1 (3,100);
-	ft::vector<int>::iterator it1;
-
-	it1 = myvector1.begin();
-	ft::distance(myvector1.begin(), myvector1.end());
-	it1 = myvector1.insert ( it1 , 200 );
-
-	myvector1.insert (it1,2,300);
-
-	it1 = myvector1.begin();
-
-	ft::vector<int> anothervector1 (2,400);
-	myvector1.insert (it1 + 2,anothervector1.begin(), anothervector1.end());
-
-	int myarray1 [] = { 501,502,503 };
-	myvector1.insert(myvector1.begin(), myarray1, myarray1 + 3);
-
-	std::cout << "myvector contains:";
-	for (it1 = myvector1.begin(); it1 < myvector1.end(); it1++)
-		std::cout << ' ' << *it1;
-	std::cout << '\n';
-
-	std::vector<int> myvector (3,100);
-	std::vector<int>::iterator it;
-
-	it = myvector.begin();
-	it = myvector.insert ( it , 200 );
-
-	myvector.insert (it,2,300);
-
-	it = myvector.begin();
-
-	std::vector<int> anothervector (2,400);
-	myvector.insert (it+2,anothervector.begin(),anothervector.end());
-
-	int myarray [] = { 501,502,503 };
-	myvector.insert (myvector.begin(), myarray, myarray+3);
-
-	std::cout << "myvector contains:";
-	for (it=myvector.begin(); it<myvector.end(); it++)
+	std::cout << "The contents of std_fifth are:";
+	for (std::vector<int>::iterator it = std_fifth.begin(); it != std_fifth.end(); ++it)
 		std::cout << ' ' << *it;
 	std::cout << '\n';
 
-	// ft::vector<int> myvector1 (3,100);
-	// ft::vector<int>::iterator it1;
+	// constructors used in the same order as described above:
+	ft::vector<int> ft_first;										// empty vector of ints
+	ft::vector<int> ft_second (4,100);								// four ints with value 100
+	ft::vector<int> ft_third (ft_second.begin(),ft_second.end());	// iterating through second
+	ft::vector<int> ft_fourth (ft_third);							// a copy of third
 
-	// it1 = myvector1.begin();
-	// ft::distance(myvector1.begin(), myvector1.end());
-	// it1 = myvector1.insert ( it1 , 200 );
+	// the iterator constructor can also be used to construct from arrays:
+	int ft_ints[] = {16,2,77,29};
+	ft::vector<int> ft_fifth (ft_ints, ft_ints + sizeof(ft_ints) / sizeof(int) );
 
-	// myvector1.insert (it1,2,300);
+	std::cout << "The contents of ft_fifth are: ";
+	for (ft::vector<int>::iterator it = ft_fifth.begin(); it != ft_fifth.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+}
 
-	// it1 = myvector1.begin();
+void ft_operator_equal()
+{
+	std::vector<int> std_foo (3,0);
+	std::vector<int> std_bar (5,0);
+
+	std_bar = std_foo;
+	std_foo = std::vector<int>();
+
+	std::cout << "Size of std_foo: " << int(std_foo.size()) << '\n';
+	std::cout << "Size of std::bar: " << int(std_bar.size()) << '\n';
+
+	ft::vector<int> ft_foo (3,0);
+	ft::vector<int> ft_bar (5,0);
+
+	ft_bar = ft_foo;
+	ft_foo = ft::vector<int>();
+
+	std::cout << "Size of ft_foo: " << int(ft_foo.size()) << '\n';
+	std::cout << "Size of ft::bar: " << int(ft_bar.size()) << '\n';
+}
+
+void ft_begin()
+{
+	std::vector<int> std_vector;
+	for (int i=1; i<=5; i++) std_vector.push_back(i);
+
+	std::cout << "std_vector contains:";
+	for (std::vector<int>::iterator it = std_vector.begin() ; it != std_vector.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	ft::vector<int> ft_vector;
+	for (int i=1; i<=5; i++) ft_vector.push_back(i);
+
+	std::cout << "ft_vector contains:";
+	for (ft::vector<int>::iterator it = ft_vector.begin() ; it != ft_vector.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+}
+
+int main() {
+
+	ft_constructor();
+	ft_operator_equal();
+	ft_begin();
+
+	// ft::vector<int> myvector (3,100);
+	// ft::vector<int>::iterator iter;
+	// std::cout << "myvector contains 1 :";
+	// for (iter = myvector.begin(); iter < myvector.end(); iter++)
+	// 	std::cout << ' ' << *iter;
+	// std::cout << '\n';
+
+	// iter = myvector.begin();
+	// iter = myvector.insert ( iter , 200 );
+
+	// std::cout << "myvector contains 2 :";
+	// for (iter = myvector.begin(); iter < myvector.end(); iter++)
+	// 	std::cout << ' ' << *iter;
+	// std::cout << '\n';
+
+	// myvector.insert (iter,2,300);
+
+	// std::cout << "myvector contains 3 :";
+	// for (iter = myvector.begin(); iter < myvector.end(); iter++)
+	// 	std::cout << ' ' << *iter;
+	// std::cout << '\n';
+
+	// iter = myvector.begin();
 
 	// ft::vector<int> anothervector1 (2,400);
-	// myvector1.insert (it1 + 2,anothervector1.begin(), anothervector1.end());
+	// myvector.insert (iter + 2,anothervector1.begin(), anothervector1.end());
+
+	// std::cout << "myvector contains 4 :";
+	// for (iter = myvector.begin(); iter < myvector.end(); iter++)
+	// 	std::cout << ' ' << *iter;
+	// std::cout << '\n';
 
 	// int myarray1 [] = { 501,502,503 };
-	// myvector1.insert(myvector1.begin(), myarray1, myarray1 + 3);
+	// myvector.insert(myvector.begin(), myarray1, myarray1 + 3);
+
+	// std::cout << "myvector contains 5 :";
+	// for (iter = myvector.begin(); iter < myvector.end(); iter++)
+	// 	std::cout << ' ' << *iter;
+	// std::cout << '\n';
+
+	// std::vector<int> vector (3,100);
+	// std::vector<int>::iterator it;
+
+	// std::cout << "vector contains 1 :  ";
+	// for (it = vector.begin(); it<vector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	// it = vector.begin();
+	// it = vector.insert ( it , 200 );
+
+	// std::cout << "vector contains 2 :  ";
+	// for (it = vector.begin(); it<vector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	// vector.insert (it,2,300);
+
+	// std::cout << "vector contains 3 :  ";
+	// for (it = vector.begin(); it<vector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	// it = vector.begin();
+
+	// std::vector<int> anothervector (2,400);
+	// vector.insert (it+2,anothervector.begin(),anothervector.end());
+
+	// std::cout << "vector contains 4 :  ";
+	// for (it = vector.begin(); it<vector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	// int myarray [] = { 501,502,503 };
+	// vector.insert (vector.begin(), myarray, myarray+3);
+
+	// std::cout << "vector contains 5 :  ";
+	// for (it = vector.begin(); it<vector.end(); it++)
+	// 	std::cout << ' ' << *it;
+	// std::cout << '\n';
+
+	// ft::vector<int> vector (3,100);
+	// ft::vector<int>::iterator iter;
+
+	// iter = myvector.begin();
+	// ft::distance(myvector.begin(), myvector.end());
+	// iter = myvector.insert ( iter , 200 );
+
+	// myvector.insert (iter,2,300);
+
+	// iter = myvector.begin();
+
+	// ft::vector<int> anothervector1 (2,400);
+	// myvector.insert (iter + 2,anothervector1.begin(), anothervector1.end());
+
+	// int myarray1 [] = { 501,502,503 };
+	// myvector.insert(vector.begin(), myarray1, myarray1 + 3);
 
 	// std::cout << "myvector contains:";
-	// for (it1 = myvector1.begin(); it1 < myvector1.end(); it1++)
-	// 	std::cout << ' ' << *it1;
+	// for (iter = vector.begin(); iter < myvector.end(); iter++)
+	// 	std::cout << ' ' << *iter;
 	// std::cout << '\n';
 
 	// unsigned int std_start_time =  clock();
