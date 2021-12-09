@@ -26,7 +26,7 @@ namespace ft {
 		{
 
 		}
-		template <typename Point, typename Ref>
+		template <class Point, class Ref>
 		explicit vector_iterator(const vector_iterator<T, Point, Ref> &src) : m_p(src.geter())
 		{
 
@@ -40,7 +40,7 @@ namespace ft {
 			return (m_p);
 		}
 		template<typename Point, typename Ref>
-		vector_iterator &operator=(vector_iterator<T, Point, Ref> const &src)
+		vector_iterator &operator=(const vector_iterator<T, Point, Ref> &src)
 		{
 			if (this != &src) {
 				m_p = src.geter();

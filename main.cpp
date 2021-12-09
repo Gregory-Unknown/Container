@@ -823,65 +823,66 @@ void ft_get_allocator()
 
 int main()
 {
-	std::cout << "ft_constructor" << std::endl;
-	ft_constructor();
+	// std::cout << "ft_constructor" << std::endl;
+	// ft_constructor();
 
-	std::cout << "ft_operator_equal" << std::endl;
-	ft_operator_equal();
+	// std::cout << "ft_operator_equal" << std::endl;
+	// ft_operator_equal();
 
-	std::cout << "ft_iterators" << std::endl;
-	ft_iterators();
+	// std::cout << "ft_iterators" << std::endl;
+	// ft_iterators();
 
-	std::cout << "ft_size" << std::endl;
-	ft_size();
+	// std::cout << "ft_size" << std::endl;
+	// ft_size();
 
-	std::cout << "ft_max_size" << std::endl;
-	ft_max_size();
+	// std::cout << "ft_max_size" << std::endl;
+	// ft_max_size();
 
-	std::cout << "ft_resize" << std::endl;
-	ft_resize();
+	// std::cout << "ft_resize" << std::endl;
+	// ft_resize();
 
-	std::cout << "ft_capacity" << std::endl;
-	ft_capacity();
+	// std::cout << "ft_capacity" << std::endl;
+	// ft_capacity();
 
-	std::cout << "ft_empty" << std::endl;
-	ft_empty();
+	// std::cout << "ft_empty" << std::endl;
+	// ft_empty();
 
-	std::cout << "ft_reserve" << std::endl;
-	ft_reserve();
+	// std::cout << "ft_reserve" << std::endl;
+	// ft_reserve();
 	
-	std::cout << "ft_operator_index" << std::endl;
-	ft_operator_index();
+	// std::cout << "ft_operator_index" << std::endl;
+	// ft_operator_index();
 
-	std::cout << "ft_at" << std::endl;
-	ft_at();
+	// std::cout << "ft_at" << std::endl;
+	// ft_at();
 
-	std::cout << "ft_front" << std::endl;
-	ft_front();
+	// std::cout << "ft_front" << std::endl;
+	// ft_front();
 
-	std::cout << "ft_back" << std::endl;
-	ft_back();
+	// std::cout << "ft_back" << std::endl;
+	// ft_back();
 
-	std::cout << "ft_assign" << std::endl;
-	ft_assign();
+	// std::cout << "ft_assign" << std::endl;
+	// ft_assign();
 
-	std::cout << "ft_push_and_pop_back" << std::endl;
-	ft_push_and_pop_back();
+	// std::cout << "ft_push_and_pop_back" << std::endl;
+	// ft_push_and_pop_back();
 
-	std::cout << "ft_insert" << std::endl;
-	ft_insert();
+	// std::cout << "ft_insert" << std::endl;
+	// ft_insert();
 
-	std::cout << "ft_erase" << std::endl;
-	ft_erase();
+	// std::cout << "ft_erase" << std::endl;
+	// ft_erase();
 
-	std::cout << "ft_swap" << std::endl;
-	ft_swap();
+	// std::cout << "ft_swap" << std::endl;
+	// ft_swap();
 
-	std::cout << "ft_clear" << std::endl;
-	ft_clear();
+	// std::cout << "ft_clear" << std::endl;
+	// ft_clear();
 
-	std::cout << "ft_get_allocator" << std::endl;
-	ft_get_allocator();
+	// std::cout << "ft_get_allocator" << std::endl;
+	// ft_get_allocator();
+
 
 	unsigned int std_search_time = std_end_time - std_start_time;
 	unsigned int ft_search_time = ft_end_time - ft_start_time;
