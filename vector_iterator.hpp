@@ -18,7 +18,7 @@ namespace ft {
 	private:
 		pointer m_p;
 	public:
-		vector_iterator() : m_p(NULL)
+		vector_iterator() : m_p(0)
 		{
 
 		}
@@ -102,43 +102,43 @@ namespace ft {
 		}
 	};
 
-	template<typename T, typename Pointer, typename Reference>
+	template<class T, class Pointer, class Reference>
 	vector_iterator<T, Pointer, Reference> operator+(typename vector_iterator<T, Pointer, Reference>::difference_type n, const vector_iterator<T, Pointer, Reference> x)
 	{
 		return (x + n);
 	}
-	template<typename T, typename Pointer, typename Reference>
+	template<class T, class Pointer, class Reference>
 	typename vector_iterator<T, Pointer, Reference>::difference_type
 	operator-(const vector_iterator<T, Pointer, Reference> &l, const vector_iterator<T, Pointer, Reference> &r)
 	{
 		return (l.geter() - r.geter());
 	}
-	template<typename T, typename LPoint, typename LRef, typename RPoint, typename RRef>
+	template<class T, class LPoint, class LRef, class RPoint, class RRef>
 	bool operator==(const vector_iterator<T, LPoint, LRef> &l, const vector_iterator<T, RPoint, RRef> &r)
 	{
 		return (l.geter() == r.geter());
 	}
-	template<typename T, typename LPoint, typename LRef, typename RPoint, typename RRef>
+	template<class T, class LPoint, class LRef, class RPoint, class RRef>
 	bool operator!=(const vector_iterator<T, LPoint, LRef> &l, const vector_iterator<T, RPoint, RRef> &r)
 	{
 		return (l.geter() != r.geter());
 	}
-	template<typename T, typename LPoint, typename LRef, typename RPoint, typename RRef>
+	template<class T, class LPoint, class LRef, class RPoint, class RRef>
 	bool operator<(const vector_iterator<T, LPoint, LRef> &l, const vector_iterator<T, RPoint, RRef> &r)
 	{
 		return (r > l);
 	}
-	template<typename T, typename LPoint, typename LRef, typename RPoint, typename RRef>
+	template<class T, class LPoint, class LRef, class RPoint, class RRef>
 	bool operator>(const vector_iterator<T, LPoint, LRef> &l, const vector_iterator<T, RPoint, RRef> &r)
 	{
 		return (l.geter() > r.geter());
 	}
-	template<typename T, typename LPoint, typename LRef, typename RPoint, typename RRef>
+	template<class T, class LPoint, class LRef, class RPoint, class RRef>
 	bool operator<=(const vector_iterator<T, LPoint, LRef> &l, const vector_iterator<T, RPoint, RRef> &r)
 	{
 		return (!(l > r));
 	}
-	template<typename T, typename LPoint, typename LRef, typename RPoint, typename RRef>
+	template<class T, class LPoint, class LRef, class RPoint, class RRef>
 	bool operator>=(const vector_iterator<T, LPoint, LRef> &l, const vector_iterator<T, RPoint, RRef> &r)
 	{
 		return (!(r > l));

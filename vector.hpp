@@ -24,8 +24,8 @@ namespace ft {
 			typedef typename allocator_type::const_reference					const_reference;
 			typedef typename allocator_type::pointer							pointer;
 			typedef typename allocator_type::const_pointer						const_pointer;
-			typedef vector_iterator <T, T*, T&>									iterator;
-			typedef vector_iterator <T, const T*, const T&>						const_iterator;
+			typedef ft::vector_iterator <T, T*, T&>									iterator;
+			typedef ft::vector_iterator <T, const T*, const T&>						const_iterator;
 			typedef ft::reverse_iterator<iterator>								reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
 			typedef typename iterator_traits<iterator>::difference_type			difference_type;
@@ -40,7 +40,10 @@ namespace ft {
 			explicit vector (const allocator_type& alloc = allocator_type())
 			: m_data(0), m_begin(0), m_capacity(10), m_size(0), m_alloc(alloc)
 			{
-				reserve(10);
+				m_data = m_alloc.allocate(m_capacity);
+				// for (size_type i = 0; i < n; ++i) {
+				// 	m_alloc.construct(m_data + i, val);
+				// }
 			}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			: m_data(0), m_begin(0), m_capacity(2 * n), m_size(n), m_alloc(alloc)
@@ -58,8 +61,6 @@ namespace ft {
 				for (InputIterator it = first; it != last; it++, count++) ;
 
 				m_size = m_capacity = count;
-				std::cout << "M_SIZE     : " << m_size << std::endl;
-				std::cout << "M_CAPACITY : " << m_capacity << std::endl;
 				try {
 					m_data = m_alloc.allocate(m_capacity * 2);
 				} catch (std::bad_alloc &e) {
@@ -137,11 +138,11 @@ namespace ft {
 			{
 				return (const_reverse_iterator(end()));
 			}
-			iterator rend()
+			reverse_iterator rend()
 			{
 				return (reverse_iterator(begin()));
 			}
-			const_iterator rend() const
+			const_reverse_iterator rend() const
 			{
 				return (const_reverse_iterator(begin()));
 			}
@@ -236,15 +237,15 @@ namespace ft {
 			template <class InputIterator>
 			void assign (InputIterator first, InputIterator last)
 			{
-				difference_type new_size = std::distance(first, last);
+				difference_type new_size = last - first;
 				if (new_size < 0 ) {
-					this->~Vector();
+					vector::~vector();
 					throw ;
 				}
 				vector save(first, last);
 				clear();
 				reserve(new_size);
-				insert(this->begin(), save.begin(), save.end());
+				insert(begin(), save.begin(), save.end());
 			}
 			void assign (size_type n, const value_type& val)
 			{
