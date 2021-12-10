@@ -32,13 +32,12 @@ namespace ft {
 			typedef size_t														size_type;
 		private:
 			pointer			m_data;
-			pointer			m_begin;
 			size_type		m_capacity;
 			size_type		m_size;
 			allocator_type	m_alloc;
 		public:
 			explicit vector (const allocator_type& alloc = allocator_type())
-			: m_data(0), m_begin(0), m_capacity(10), m_size(0), m_alloc(alloc)
+			: m_data(0), m_capacity(10), m_size(0), m_alloc(alloc)
 			{
 				m_data = m_alloc.allocate(m_capacity);
 				// for (size_type i = 0; i < n; ++i) {
@@ -46,7 +45,7 @@ namespace ft {
 				// }
 			}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
-			: m_data(0), m_begin(0), m_capacity(2 * n), m_size(n), m_alloc(alloc)
+			: m_data(0), m_capacity(2 * n), m_size(n), m_alloc(alloc)
 			{
 				m_data = m_alloc.allocate(m_capacity);
 				for (size_type i = 0; i < n; ++i) {
@@ -55,7 +54,7 @@ namespace ft {
 			}
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if < !std::numeric_limits<InputIterator>::is_specialized >::type* = 0)
-			: m_data(0), m_begin(0), m_capacity(0), m_size(0), m_alloc(alloc)
+			: m_data(0), m_capacity(0), m_size(0), m_alloc(alloc)
 			{
 				size_type count = 0;
 				for (InputIterator it = first; it != last; it++, count++) ;
@@ -67,13 +66,12 @@ namespace ft {
 					this->~vector();
 					throw ;
 				}
-				m_begin = m_data;
 				for (size_type i = 0; i < m_size; ++i, ++first) {
 					m_alloc.construct(m_data + i, *first);
 				}
 			}
 			vector (const vector& x)
-			: m_data(0), m_begin(0), m_capacity(x.m_capacity), m_size(x.m_size), m_alloc(x.m_alloc)
+			: m_data(0), m_capacity(x.m_capacity), m_size(x.m_size), m_alloc(x.m_alloc)
 			{
 				try {
 					m_data = m_alloc.allocate(m_size);
@@ -81,7 +79,6 @@ namespace ft {
 					this->~vector();
 					throw ;
 				}
-				m_begin = m_data;
 				for (size_type i = 0; i < m_size; ++i) {
 					m_alloc.construct(m_data + i, x[i]);
 				}
@@ -92,9 +89,8 @@ namespace ft {
 					for (size_type i = 0; i < m_size; ++i) {
 						m_alloc.destroy(m_data + i);
 					}
-					m_alloc.deallocate(m_begin, m_capacity);
+					m_alloc.deallocate(m_data, m_capacity);
 					m_data = 0;
-					m_begin = 0;
 					m_size = 0;
 					m_capacity = 0;
 				}
@@ -108,7 +104,6 @@ namespace ft {
 					for (size_type i = 0; i < vec.m_size; ++i) {
 						m_alloc.construct(m_data + i, vec[i]);
 					}
-					m_begin = m_data;
 					m_size = vec.m_size;
 					m_capacity = vec.m_capacity;
 				}
@@ -182,19 +177,22 @@ namespace ft {
 			{
 				if (n <= m_capacity) return ;
 				pointer newdata = m_alloc.allocate(n);
-				// for (size_type i = 0; i < m_size; ++i) {
-				// 	m_alloc.construct(newdata + i, m_data[i]);
-				// }
-				try {
-					std::uninitialized_copy(m_data, m_data + m_size, newdata);
-				} catch (...) {
-					m_alloc.deallocate(newdata, n);
-					throw;
-				}
 				for (size_type i = 0; i < m_size; ++i) {
+					m_alloc.construct(newdata + i, m_data[i]);
 					m_alloc.destroy(m_data + i);
 				}
 				m_alloc.deallocate(m_data, m_capacity);
+				// try {
+				// 		std::uninitialized_copy(m_data, m_data + m_size, newdata);
+				// 	} catch (...) {
+				// 		m_alloc.deallocate(newdata, n);
+				// 		throw;
+				// 	}
+				// 	for (size_type i = 0; i < m_size; ++i) {
+				// 		m_alloc.destroy(m_data + i);
+				// 	}
+				// 	m_alloc.deallocate(m_data, m_capacity);
+				// }
 				m_data = newdata;
 				m_capacity = n;
 			}
@@ -307,7 +305,7 @@ namespace ft {
 			}
 			iterator erase (iterator position)
 			{
-				difference_type index = position - this->begin();
+				difference_type index = position - begin();
 
 				if (m_size == 0) {
 					return iterator(m_data + index);
@@ -316,11 +314,7 @@ namespace ft {
 				m_alloc.destroy(m_data + index);
 				--m_size;
 				memmove
-				(
-				m_data + index,
-				m_data + index + 1,
-				sizeof(value_type) * (m_size - index)
-				);
+				(m_data + index, m_data + index + 1, sizeof(value_type) * (m_size - index));
 				return iterator(m_data + index);
 			}
 			iterator erase (iterator first, iterator last)
@@ -352,7 +346,7 @@ namespace ft {
 			}
 			void clear()
 			{
-				if (m_begin != 0) {
+				if (m_data != 0) {
 					for (size_type i = 0; i < m_size; ++i) {
 						m_alloc.destroy(m_data + i);
 					}
@@ -362,24 +356,6 @@ namespace ft {
 			allocator_type get_allocator() const
 			{
 				return (m_alloc);
-			}
-			private:
-			void shrink_to_fit()
-			{
-				size_type new_cap = m_size * 2;
-				pointer newdata = m_alloc.allocate(new_cap);
-				try {
-					std::uninitialized_copy(m_data, m_data + m_size, newdata);
-				} catch (...) {
-					m_alloc.deallocate(newdata, new_cap);
-					throw;
-				}
-				for (size_type i = 0; i < m_size; ++i) {
-					m_alloc.destroy(m_data + i);
-				}
-				m_alloc.deallocate(m_data, m_capacity);
-				m_data = newdata;
-				m_capacity = new_cap;
 			}
 	};
 }

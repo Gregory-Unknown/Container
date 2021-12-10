@@ -3,6 +3,8 @@
 #include <vector>
 #include <iterator>
 #include <ctime>
+#include "stack.hpp"
+#include <stack>
 
 unsigned int std_start_time =  clock();
 unsigned int std_end_time = 0;
@@ -821,68 +823,238 @@ void ft_get_allocator()
 	ft_end_time += (clock() - ft_tmp_time);
 }
 
+void ft_stack_constructor()
+{
+	unsigned int std_tmp_time =  clock();
+
+	std::vector<int> std_vector (2,200);
+
+	std::stack<int> std_first;
+	std::stack<int,std::vector<int> > std_second;
+	std::stack<int,std::vector<int> > std_third (std_vector);
+
+	std::cout << "size of std_first: " << std_first.size() << '\n';
+	std::cout << "size of std_second: " << std_second.size() << '\n';
+	std::cout << "size of std_third: " << std_third.size() << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+
+	unsigned int ft_tmp_time =  clock();
+
+	ft::vector<int> ft_vector (2,200);
+
+	ft::stack<int> ft_first;
+	ft::stack<int,ft::vector<int> > ft_second;
+	ft::stack<int,ft::vector<int> > ft_third (ft_vector);
+
+	std::cout << "size of ft_first: " << ft_first.size() << '\n';
+	std::cout << "size of ft_second: " << ft_second.size() << '\n';
+	std::cout << "size of ft_third: " << ft_third.size() << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_stack_empty()
+{
+	unsigned int std_tmp_time =  clock();
+
+	std::stack<int> std_stack;
+	int std_sum (0);
+
+	for (int i = 1;i <= 10; ++i) std_stack.push(i);
+
+	while (!std_stack.empty())
+	{
+		std_sum += std_stack.top();
+		std_stack.pop();
+	}
+
+  	std::cout << "total std_sum : " << std_sum << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+
+	unsigned int ft_tmp_time =  clock();
+
+	ft::stack<int> ft_stack;
+	int ft_sum (0);
+
+	for (int i = 1; i <= 10; ++i) ft_stack.push(i);
+
+	while (!ft_stack.empty())
+	{
+		ft_sum += ft_stack.top();
+		ft_stack.pop();
+	}
+	std::cout << "total ft_sum : " << ft_sum << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_stack_size()
+{
+	unsigned int std_tmp_time =  clock();
+
+	std::stack<int> std_stack;
+	std::cout << "0. std_stack size: " << std_stack.size() << '\n';
+
+	for (int i = 0; i < 5; ++i) std_stack.push(i);
+	std::cout << "1. std_stack size: " << std_stack.size() << '\n';
+
+	std_stack.pop();
+	std::cout << "2. std_stack size: " << std_stack.size() << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+
+	unsigned int ft_tmp_time =  clock();
+
+	ft::stack<int> ft_stack;
+	std::cout << "0. ft_stack size: " << ft_stack.size() << '\n';
+
+	for (int i = 0; i < 5; ++i) ft_stack.push(i);
+	std::cout << "1. ft_stack size: " << ft_stack.size() << '\n';
+
+	ft_stack.pop();
+	std::cout << "2. ft_stack size: " << ft_stack.size() << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+
+void ft_stack_top()
+{
+	unsigned int std_tmp_time =  clock();
+
+	std::stack<int> std_stack;
+
+	std_stack.push(10);
+	std_stack.push(20);
+
+	std_stack.top() -= 5;
+
+	std::cout << "std_stack.top() is now " << std_stack.top() << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+
+	unsigned int ft_tmp_time =  clock();
+
+	ft::stack<int> ft_stack;
+
+	ft_stack.push(10);
+	ft_stack.push(20);
+
+	ft_stack.top() -= 5;
+
+	std::cout << "ft_stack.top() is now " << ft_stack.top() << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_stack_push_and_pop()
+{
+	unsigned int std_tmp_time =  clock();
+
+	std::stack<int> std_stack;
+
+	for (int i = 0; i < 5; ++i) std_stack.push(i);
+
+	std::cout << "Popping out elements...";
+	while (!std_stack.empty())
+	{
+		std::cout << ' ' << std_stack.top();
+		std_stack.pop();
+	}
+	std::cout << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+
+	unsigned int ft_tmp_time =  clock();
+
+	ft::stack<int> ft_stack;
+
+	for (int i = 0; i < 5; ++i) ft_stack.push(i);
+
+	std::cout << "Popping out elements...";
+	while (!ft_stack.empty())
+	{
+		std::cout << ' ' << ft_stack.top();
+		ft_stack.pop();
+	}
+	std::cout << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+
 int main()
 {
-	// std::cout << "ft_constructor" << std::endl;
-	// ft_constructor();
+	std::cout << "ft_vector" << std::endl;
+	std::cout << "ft_constructor" << std::endl;
+	ft_constructor();
 
-	// std::cout << "ft_operator_equal" << std::endl;
-	// ft_operator_equal();
+	std::cout << "ft_operator_equal" << std::endl;
+	ft_operator_equal();
 
-	// std::cout << "ft_iterators" << std::endl;
-	// ft_iterators();
+	std::cout << "ft_iterators" << std::endl;
+	ft_iterators();
 
-	// std::cout << "ft_size" << std::endl;
-	// ft_size();
+	std::cout << "ft_size" << std::endl;
+	ft_size();
 
-	// std::cout << "ft_max_size" << std::endl;
-	// ft_max_size();
+	std::cout << "ft_max_size" << std::endl;
+	ft_max_size();
 
-	// std::cout << "ft_resize" << std::endl;
-	// ft_resize();
+	std::cout << "ft_resize" << std::endl;
+	ft_resize();
 
-	// std::cout << "ft_capacity" << std::endl;
-	// ft_capacity();
+	std::cout << "ft_capacity" << std::endl;
+	ft_capacity();
 
-	// std::cout << "ft_empty" << std::endl;
-	// ft_empty();
+	std::cout << "ft_empty" << std::endl;
+	ft_empty();
 
-	// std::cout << "ft_reserve" << std::endl;
-	// ft_reserve();
+	std::cout << "ft_reserve" << std::endl;
+	ft_reserve();
 	
-	// std::cout << "ft_operator_index" << std::endl;
-	// ft_operator_index();
+	std::cout << "ft_operator_index" << std::endl;
+	ft_operator_index();
 
-	// std::cout << "ft_at" << std::endl;
-	// ft_at();
+	std::cout << "ft_at" << std::endl;
+	ft_at();
 
-	// std::cout << "ft_front" << std::endl;
-	// ft_front();
+	std::cout << "ft_front" << std::endl;
+	ft_front();
 
-	// std::cout << "ft_back" << std::endl;
-	// ft_back();
+	std::cout << "ft_back" << std::endl;
+	ft_back();
 
-	// std::cout << "ft_assign" << std::endl;
-	// ft_assign();
+	std::cout << "ft_assign" << std::endl;
+	ft_assign();
 
-	// std::cout << "ft_push_and_pop_back" << std::endl;
-	// ft_push_and_pop_back();
+	std::cout << "ft_push_and_pop_back" << std::endl;
+	ft_push_and_pop_back();
 
-	// std::cout << "ft_insert" << std::endl;
-	// ft_insert();
+	std::cout << "ft_insert" << std::endl;
+	ft_insert();
 
-	// std::cout << "ft_erase" << std::endl;
-	// ft_erase();
+	std::cout << "ft_erase" << std::endl;
+	ft_erase();
 
-	// std::cout << "ft_swap" << std::endl;
-	// ft_swap();
+	std::cout << "ft_swap" << std::endl;
+	ft_swap();
 
-	// std::cout << "ft_clear" << std::endl;
-	// ft_clear();
+	std::cout << "ft_clear" << std::endl;
+	ft_clear();
 
-	// std::cout << "ft_get_allocator" << std::endl;
-	// ft_get_allocator();
+	std::cout << "ft_get_allocator" << std::endl;
+	ft_get_allocator();
 
+	std::cout << "ft_stack" << std::endl;
+
+	std::cout << "ft_stack_constructor" << std::endl;
+	ft_stack_constructor();
+	std::cout << "ft_stack_empty" << std::endl;
+	ft_stack_empty();
+	std::cout << "ft_stack_size" << std::endl;
+	ft_stack_size();
+	std::cout << "ft_stack_top" << std::endl;
+	ft_stack_top();
+	std::cout << "ft_stack_push_and_pop" << std::endl;
+	ft_stack_push_and_pop();
 
 	unsigned int std_search_time = std_end_time - std_start_time;
 	unsigned int ft_search_time = ft_end_time - ft_start_time;

@@ -53,7 +53,6 @@ namespace ft {
 
 	private:
 		iterator_type m_it;
-
 	public:
 		reverse_iterator(): m_it(Iterator())
 		{
