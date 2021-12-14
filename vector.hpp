@@ -183,16 +183,15 @@ namespace ft {
 				}
 				m_alloc.deallocate(m_data, m_capacity);
 				// try {
-				// 		std::uninitialized_copy(m_data, m_data + m_size, newdata);
-				// 	} catch (...) {
-				// 		m_alloc.deallocate(newdata, n);
-				// 		throw;
-				// 	}
-				// 	for (size_type i = 0; i < m_size; ++i) {
-				// 		m_alloc.destroy(m_data + i);
-				// 	}
-				// 	m_alloc.deallocate(m_data, m_capacity);
+				// 	std::uninitialized_copy(m_data, m_data + m_size, newdata);
+				// } catch (...) {
+				// 	m_alloc.deallocate(newdata, n);
+				// 	throw;
 				// }
+				// for (size_type i = 0; i < m_size; ++i) {
+				// 	m_alloc.destroy(m_data + i);
+				// }
+				// m_alloc.deallocate(m_data, m_capacity);
 				m_data = newdata;
 				m_capacity = n;
 			}
@@ -258,8 +257,8 @@ namespace ft {
 			}
 			void pop_back()
 			{
-				m_alloc.destroy(m_data + m_size - 1);
 				--m_size;
+				m_alloc.destroy(m_data + m_size);
 			}
 			iterator insert (iterator position, const value_type& val)
 			{
@@ -272,8 +271,13 @@ namespace ft {
 			{
 				difference_type tmp = position - begin();
 				if (tmp < 0 || n == 0) return ;
-				if (m_capacity >= m_size + n)
-					reserve(std::max(m_size * 2, m_size + n));
+				if (m_capacity < m_size + n) {
+					if (m_size * 2 > m_size + n)
+						reserve(m_size * 2);
+					else
+						reserve(m_size + n);
+				}
+					// reserve(std::max(m_size * 2, m_size + n));
 				position = begin() + tmp;
 				for (iterator iter = end() + n - 1; iter >= position + n; --iter) {
 					m_alloc.construct(iter.geter(), *(iter - n));

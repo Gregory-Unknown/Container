@@ -3,10 +3,10 @@ SRCS	= main.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 
-CC = clang++
+CC = g++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-#-std=c++98
+#-std=c++98  -fsanitize=address
 RM = rm -rf
 
 all: $(NAME)
