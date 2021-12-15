@@ -74,7 +74,7 @@ namespace ft {
 			: m_data(0), m_capacity(x.m_capacity), m_size(x.m_size), m_alloc(x.m_alloc)
 			{
 				try {
-					m_data = m_alloc.allocate(m_size);
+					m_data = m_alloc.allocate(m_capacity);
 				} catch (std::bad_alloc &e) {
 					this->~vector();
 					throw ;
@@ -83,17 +83,20 @@ namespace ft {
 					m_alloc.construct(m_data + i, x[i]);
 				}
 			}
-			virtual ~vector()
+			~vector()
 			{
 				if (m_data) {
-					for (size_type i = 0; i < m_size; ++i) {
-						m_alloc.destroy(m_data + i);
+					if (m_size) {
+						for (size_type i = 0; i < m_size; ++i) {
+							m_alloc.destroy(m_data + i);
+						}
 					}
 					m_alloc.deallocate(m_data, m_capacity);
 					m_data = 0;
 					m_size = 0;
 					m_capacity = 0;
 				}
+				
 			}
 			vector &operator=(const vector &vec)
 			{

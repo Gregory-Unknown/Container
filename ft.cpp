@@ -459,7 +459,7 @@ void ft_stack_empty()
 	ft::stack<int> ft_stack1;
 	int ft_sum (0);
 
-	for (int i = 1; i <= 10; ++i) ft_stack1.push(i);
+	for (int i = 1; i <= 5; ++i) ft_stack1.push(i);
 
 	while (!ft_stack1.empty())
 	{

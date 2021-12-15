@@ -116,5 +116,4 @@ int main()
 	std::cout << "STD_TIME " << std_search_time << std::endl;
 	std::cout << "FT_TIME  " << ft_search_time << std::endl;
 	std::cout << "RESULT " << ft_search_time / std_search_time << std::endl;
-	system("leaks Container");
 }
