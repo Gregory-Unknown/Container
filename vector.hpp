@@ -40,9 +40,6 @@ namespace ft {
 			: m_data(0), m_capacity(10), m_size(0), m_alloc(alloc)
 			{
 				m_data = m_alloc.allocate(m_capacity);
-				// for (size_type i = 0; i < n; ++i) {
-				// 	m_alloc.construct(m_data + i, val);
-				// }
 			}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
 			: m_data(0), m_capacity(2 * n), m_size(n), m_alloc(alloc)
@@ -96,7 +93,7 @@ namespace ft {
 					m_size = 0;
 					m_capacity = 0;
 				}
-				
+
 			}
 			vector &operator=(const vector &vec)
 			{

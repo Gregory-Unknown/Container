@@ -5,7 +5,7 @@ OBJS = $(SRCS:.cpp=.o)
 
 CC = clang++
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 #-std=c++98  -fsanitize=address
 RM = rm -rf
 
