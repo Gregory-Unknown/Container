@@ -34,19 +34,22 @@ namespace ft {
 	class tree
 	{
 	public:
-		typedef node<P>												node;
-		typedef typename Alloc::template rebind<node >::other node_alloc_type;
+		typedef node<P>											node;
+		typedef typename Alloc::template rebind<node >::other	node_alloc_type;
 	private:
-		node_alloc_type _alloc;
+		node_alloc_type m_alloc;
 		node *root;
 		node *elem;
-		Compare _comp;
+		Compare m_comp;
 	public:
 		/// Constructor ///
-		tree() : _alloc(std::allocator<node >()), root(NULL), elem(NULL), _comp(std::less<Key >())  {}
+		tree() : m_alloc(std::allocator<node >()), root(NULL), elem(NULL), m_comp(std::less<Key >())
+		{
 
-		explicit tree(P data) : _alloc(std::allocator<node >()),  root(_alloc.allocate(1)), elem(NULL), _comp(std::less<Key >()) {
-			_alloc.construct(root, node(data));
+		}
+
+		explicit tree(P data) : m_alloc(std::allocator<node >()),  root(m_alloc.allocate(1)), elem(NULL), m_comp(std::less<Key >()) {
+			m_alloc.construct(root, node(data));
 			root->color = black;
 		}
 
@@ -78,7 +81,7 @@ namespace ft {
 		printTreeHelper(this->root, 0);
 	}
 
-		tree(const tree& x) : _alloc(x._alloc), root(NULL), elem(NULL), _comp(std::less<Key >()) {
+		tree(const tree& x) : m_alloc(x.m_alloc), root(NULL), elem(NULL), m_comp(std::less<Key >()) {
 			*this = x;
 		}
 
@@ -106,7 +109,7 @@ namespace ft {
 				return (NULL);
 			else if (key == start->data.getFirst())
 				return (start);
-			else if (_comp(key, start->data.getFirst()))
+			else if (m_comp(key, start->data.getFirst()))
 				return (find(key, start->left));
 			else
 				return (find(key, start->right));
@@ -117,7 +120,7 @@ namespace ft {
 				return(true);
 			else if (data.getFirst() == start->data.getFirst())
 				return (false);
-			else if (_comp(data.getFirst(), start->data.getFirst()))
+			else if (m_comp(data.getFirst(), start->data.getFirst()))
 				return (notExist(data, start->left));
 			else
 				return (notExist(data, start->right));
@@ -128,15 +131,15 @@ namespace ft {
 				return (NULL);
 			else if (data.getFirst() == start->data.getFirst())
 				return (start);
-			else if (_comp(data.getFirst(), start->data.getFirst()))
+			else if (m_comp(data.getFirst(), start->data.getFirst()))
 				return (findKey(data, start->left));
 			else
 				return (findKey(data, start->right));
 		}
 
 		node *createElem(const P data) {
-			elem = _alloc.allocate(1);
-			_alloc.construct(elem, node(data));
+			elem = m_alloc.allocate(1);
+			m_alloc.construct(elem, node(data));
 			return elem;
 		}
 
@@ -168,7 +171,7 @@ namespace ft {
 				root = elem;
 				return (root);
 			}
-			if (_comp(elem->data.getFirst(), start->data.getFirst())) {
+			if (m_comp(elem->data.getFirst(), start->data.getFirst())) {
 				if (start->left)
 					insertElem(elem, start->left);
 				else {
@@ -281,7 +284,7 @@ namespace ft {
 			while (toDel != NULL) {
 				if (toDel->data.getFirst() == data.getFirst())
 					break;
-				if (!_comp(toDel->data.getFirst(), data.getFirst()))
+				if (!m_comp(toDel->data.getFirst(), data.getFirst()))
 					toDel = toDel->left;
 				else
 					toDel = toDel->right;
@@ -413,8 +416,8 @@ namespace ft {
 			}
 
 			void ft_delete(node *toDel) {
-			_alloc.destroy(toDel);
-			_alloc.deallocate(toDel, 1);
+			m_alloc.destroy(toDel);
+			m_alloc.deallocate(toDel, 1);
 		}
 
 			void deleteTree(node *root) {
