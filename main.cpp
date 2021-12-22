@@ -111,10 +111,41 @@ int main()
 	// ft_stack_push_and_pop();
 
 	// std::cout << "TIME "<< std::endl;
-	std::map<int, int> m;
-	ft::map<int, int> a;
+	std::map<int, std::string> m;
+	ft::map<int, std::string> a;
+	// a.test_show_map();
+	a.insert(ft::pair<int, std::string>(8, "a"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(11, "b"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(20, "c"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(25, "d"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(30, "e"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(19, "f"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(8, "g"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	a.insert(ft::pair<int, std::string>(17, "k"));
+
+	std::cout << "-------------------------------------------------" << std::endl;
+	//a.test_show_map();
 	unsigned int std_search_time = std_time();
 	unsigned int ft_search_time = ft_time();
+
+	for (ft::map<int,std::string>::iterator it = a.begin(); it != a.end(); ++it)
+	std::cout << it->first << " => " << it->second << '\n';
+
+	return 0;
 
 	std::cout << "STD_TIME " << std_search_time << std::endl;
 	std::cout << "FT_TIME  " << ft_search_time << std::endl;

@@ -11,6 +11,23 @@ namespace ft {
 	class bidirectional_iterator_tag : public  forward_iterator_tag {};
 	class random_access_iterator_tag : public  bidirectional_iterator_tag {};
 
+	template<bool Cond, typename T>
+	struct is_iterator_tag {
+		typedef T type;
+		static const bool value = Cond;
+	};
+
+	template<typename T>
+	struct is_input_iterator_tag: public is_iterator_tag<false, T> {};
+	template<>
+	struct is_input_iterator_tag<random_access_iterator_tag>: public is_iterator_tag<true, random_access_iterator_tag> {};
+	template<>
+	struct is_input_iterator_tag<bidirectional_iterator_tag>: public is_iterator_tag<true, bidirectional_iterator_tag> {};
+	template<>
+	struct is_input_iterator_tag<forward_iterator_tag>: public is_iterator_tag<true, forward_iterator_tag> {};
+	template<>
+	struct is_input_iterator_tag<input_iterator_tag>: public is_iterator_tag<true, input_iterator_tag> {};
+
 	template <class Iterator>
 	class iterator_traits {
 	public:
