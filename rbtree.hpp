@@ -8,10 +8,7 @@ namespace ft {
 
 # include <memory>
 # include <iostream>
-// # include "algorithm.hpp"
 # include "map_iterator.hpp"
-// # include "utility.hpp"
-// # include "functional.hpp"
 
 namespace ft
 {
