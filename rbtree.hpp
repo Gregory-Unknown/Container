@@ -3,12 +3,13 @@
 
 namespace ft {
     template<typename T, typename Compare, typename Alloc, typename NodeAlloc> class RBTree;
-    template<typename T> struct RBTreeNode;
+    template<typename T> struct Tree;
 }
 
 # include <memory>
 # include <iostream>
-# include "map_iterator.hpp"
+# include "tree_iterator.hpp"
+#include "pair.hpp"
 
 namespace ft
 {
@@ -20,20 +21,20 @@ namespace ft
 	}
 
 	template<typename T>
-	struct RBTreeNode {
+	struct Tree {
 		T			*value;
-		RBTreeNode	*left;
-		RBTreeNode	*right;
-		RBTreeNode	*parent;
+		Tree		*left;
+		Tree		*right;
+		Tree		*parent;
 		bool		color;
 
-		RBTreeNode(T *value): value(value), left(NULL), right(NULL), parent(NULL), color(true)
+		Tree(T *value): value(value), left(NULL), right(NULL), parent(NULL), color(true)
 		{
 
 		}
 	};
 
-	template< typename T, typename Compare = std::less<T>, typename Alloc = std::allocator<T>, typename NodeAlloc = std::allocator< RBTreeNode<T> > >
+	template< typename T, typename Compare = std::less<T>, typename Alloc = std::allocator<T>, typename NodeAlloc = std::allocator< Tree<T> > >
 	class RBTree
 	{
 		public:
@@ -49,339 +50,70 @@ namespace ft
 		typedef size_t									size_type;
 
 		private:
-		allocator_type			_alloc;
-		node_allocator_type		_node_alloc;
-		value_compare			_comp;
-		RBTreeNode<value_type>	*_root;
-		RBTreeNode<value_type>	*_end;
-		size_type				_size;
-
-		RBTreeNode<value_type> *_find_leftmost_node(RBTreeNode<value_type> *node) const
-		{
-			while (node && node->left)
-				node = node->left;
-			return (node);
-		}
-		RBTreeNode<value_type> *_find_rightmost_node(RBTreeNode<value_type> *node) const
-		{
-			while (node && node->right)
-				node = node->right;
-			return (node);
-		}
-		RBTreeNode<value_type> *_create_node(const value_type &val)
-		{
-			value_type *p = _alloc.allocate(1);
-			_alloc.construct(p, val);
-
-			RBTreeNode<value_type> *node = _node_alloc.allocate(1);
-			_node_alloc.construct(node, RBTreeNode<value_type>(p));
-
-			return (node);
-		}
-		void _clear_node(RBTreeNode<value_type> *node)
-		{
-			if (node->value) {
-				_alloc.destroy(node->value);
-				_alloc.deallocate(node->value, 1);
-			}
-			_node_alloc.destroy(node);
-			_node_alloc.deallocate(node, 1);
-		}
-		pair<RBTreeNode<value_type>*, bool> _bst_insert(RBTreeNode<value_type> *node)
-		{
-			if (!_root) {
-				_root = node;
-				return (ft::make_pair(node, true));
-			}
-
-			RBTreeNode<T> *x = _root;
-			RBTreeNode<T> *y = NULL;
-
-			while (x) {
-				y = x;
-
-				if (_comp(*x->value, *node->value))
-					x = y->right;
-				else if (_comp(*node->value, *x->value))
-					x = y->left;
-				else
-					return (ft::make_pair(x, false));
-			}
-
-			node->parent = y;
-
-			if (_comp(*y->value, *node->value))
-				y->right = node;
-			else
-				y->left = node;
-
-			return (ft::make_pair(node, true));
-			}
-			RBTreeNode<value_type> *_bst_erase(RBTreeNode<value_type> *node){
-				if (!node)
-					return (NULL);
-
-			RBTreeNode<value_type> *parent = node->parent;
-
-			if (!node->left && !node->right) {
-				if (parent == _end) {
-					_root = NULL;
-				} else if (parent->left == node) {
-					parent->left = NULL;
-				} else {
-					parent->right = NULL;
-				}
-
-				_clear_node(node);
-				return (parent);
-			}
-
-			if (!node->right) {
-				RBTreeNode<value_type> *left = node->left;
-
-				if (node->parent == _end) {
-					_root = left;
-					left->parent = NULL;
-				} else if (node->parent->left == node) {
-					node->parent->left = left;
-					left->parent = node->parent;
-				} else {
-					node->parent->right = left;
-					left->parent = node->parent;
-				}
-
-				_clear_node(node);
-				return (left);
-			}
-
-			if (!node->left) {
-				RBTreeNode<value_type> *right = node->right;
-
-				if (node->parent == _end) {
-					_root = right;
-					right->parent = NULL;
-				} else if (node->parent->left == node) {
-					node->parent->left = right;
-					right->parent = node->parent;
-				} else {
-					node->parent->right = right;
-					right->parent = node->parent;
-				}
-
-				_clear_node(node);
-				return (right);
-			}
-
-			RBTreeNode<value_type> *prev = _find_rightmost_node(node->left);
-
-			_alloc.destroy(node->value);
-			_alloc.construct(node->value, *prev->value);
-
-			return (_bst_erase(prev));
-		}
-		void _bst_clear(RBTreeNode<value_type> *node)
-		{
-			if (!node)
-				return;
-			_bst_clear(node->left);
-			_bst_clear(node->right);
-			_clear_node(node);
-		}
-		RBTreeNode<typename RBTree<T, Compare, Alloc, NodeAlloc>::value_type> *_bst_clone(RBTreeNode <value_type> *node, RBTreeNode <value_type> *parent)
-		{
-			if (!node)
-				return (NULL);
-			RBTreeNode<value_type> *new_node = _create_node(*node->value);
-			new_node->parent = parent;
-			new_node->color = node->color;
-			new_node->left = _bst_clone(node->left, new_node);
-			new_node->right = _bst_clone(node->right, new_node);
-			return (new_node);
-		}
-		RBTreeNode<value_type> *_bst_find(const value_type &val, RBTreeNode<value_type> *node) const
-		{
-			if (!node)
-				return (_end);
-			if (_comp(*node->value, val))
-				return (_bst_find(val, node->right));
-			else if (_comp(val, *node->value))
-				return (_bst_find(val, node->left));
-			else
-				return (node);
-		}
-		RBTreeNode<value_type> *_bst_lower_bound(const value_type &val, RBTreeNode<value_type> *node) const
-		{
-			if (!node)
-				return (_end);
-			if (_comp(*node->value, val))
-				return (_bst_lower_bound(val, node->right));
-			else {
-				RBTreeNode<value_type> *left = _bst_lower_bound(val, node->left);
-				return (left != _end ? left : node);
-			}
-		}
-		RBTreeNode<value_type> *_bst_upper_bound(const value_type &val, RBTreeNode<value_type> *node) const
-		{
-			if (!node)
-				return (_end);
-			if (!_comp(val, *node->value))
-				return (_bst_upper_bound(val, node->right));
-			else {
-				RBTreeNode<value_type> *left = _bst_upper_bound(val, node->left);
-				return (left != _end ? left : node);
-			}
-		}
-		void _rotateLeft(RBTreeNode<value_type> *node)
-		{
-			RBTreeNode<value_type> *right = node->right;
-			node->right = right->left;
-
-			if (node->right)
-				node->right->parent = node;
-
-			right->parent = node->parent;
-
-			if (!node->parent)
-				_root = right;
-			else if (node == node->parent->left)
-				node->parent->left = right;
-			else
-				node->parent->right = right;
-
-			right->left = node;
-			node->parent = right;
-		}
-		void _rotateRight(RBTreeNode<value_type> *node)
-		{
-			RBTreeNode<value_type> *left = node->left;
-			node->left = left->right;
-
-			if (node->left)
-				node->left->parent = node;
-
-			left->parent = node->parent;
-
-			if (!node->parent)
-				_root = left;
-			else if (node == node->parent->left)
-				node->parent->left = left;
-			else
-				node->parent->right = left;
-
-			left->right = node;
-			node->parent = left;
-		}
-		void _balance(RBTreeNode<value_type> *node)
-		{
-			RBTreeNode<value_type> *parent;
-			RBTreeNode<value_type> *grandparent;
-			RBTreeNode<value_type> *uncle;
-
-			while (node != _root && node->color && node->parent->color) {
-				parent = node->parent;
-				grandparent = node->parent->parent;
-
-				if (parent == grandparent->left) {
-					uncle = grandparent->right;
-
-					if (uncle && uncle->color) {
-						grandparent->color = true;
-						parent->color = false;
-						uncle->color = false;
-						node = grandparent;
-					} else {
-						if (node == parent->right) {
-							_rotateLeft(parent);
-							node = parent;
-							parent = node->parent;
-						}
-
-						_rotateRight(grandparent);
-						ft::swap(parent->color, grandparent->color);
-						node = parent;
-					}
-				} else {
-					uncle = grandparent->left;
-
-					if (uncle && uncle->color) {
-						grandparent->color = true;
-						parent->color = false;
-						uncle->color = false;
-						node = grandparent;
-					} else {
-						if (node == parent->left) {
-							_rotateRight(parent);
-							node = parent;
-							parent = node->parent;
-						}
-
-						_rotateLeft(grandparent);
-						ft::swap(parent->color, grandparent->color);
-						node = parent;
-					}
-				}
-			}
-
-			_root->color = false;
-		}
+		allocator_type			m_alloc;
+		node_allocator_type		m_nodem_alloc;
+		value_compare			m_comp;
+		Tree<value_type>		*m_root;
+		Tree<value_type>		*m_end;
+		size_type				m_size;
 
 		public:
-		RBTree(const value_compare &comp = value_compare(), const allocator_type &alloc = allocator_type(), const node_allocator_type &node_alloc = node_allocator_type())
-		: _alloc(alloc), _node_alloc(node_alloc), _comp(comp), _root(NULL), _size(0)
+		RBTree(const value_compare &comp = value_compare(), const allocator_type &alloc = allocator_type(), const node_allocator_type &nodem_alloc = node_allocator_type())
+		: m_alloc(alloc), m_nodem_alloc(nodem_alloc), m_comp(comp), m_root(NULL), m_size(0)
 		{
-			_end = _node_alloc.allocate(1);
-			_node_alloc.construct(_end, RBTreeNode<value_type>(NULL));
+			m_end = m_nodem_alloc.allocate(1);
+			m_nodem_alloc.construct(m_end, Tree<value_type>(NULL));
 		}
 		RBTree(const RBTree &src)
-		:_alloc(src._alloc), _node_alloc(src._node_alloc), _comp(src._comp), _root(NULL), _size(src._size)
+		:m_alloc(src.m_alloc), m_nodem_alloc(src.m_nodem_alloc), m_comp(src.m_comp), m_root(NULL), m_size(src.m_size)
 		{
-			_root = _bst_clone(src._root, NULL);
-			_end = _node_alloc.allocate(1);
-			_node_alloc.construct(_end, RBTreeNode<value_type>(NULL));
-			if (_root) {
-				_root->parent = _end;
-				_end->left = _root;
+			m_root = clone_tree(src.m_root, NULL);
+			m_end = m_nodem_alloc.allocate(1);
+			m_nodem_alloc.construct(m_end, Tree<value_type>(NULL));
+			if (m_root) {
+				m_root->parent = m_end;
+				m_end->left = m_root;
 			}
 		}
 		~RBTree()
 		{
 			clear();
-			_clear_node(_end);
+			clear(m_end);
 		}
 		RBTree &operator=(const RBTree &other)
 		{
-			if (this == &other)
-				return (*this);
-			clear();
-			_alloc = other._alloc;
-			_node_alloc = other._node_alloc;
-			_comp = other._comp;
-			_root = _bst_clone(other._root, NULL);
-			_size = other._size;
+			if (this == &other) {
+				clear();
+				m_alloc = other.m_alloc;
+				m_nodem_alloc = other.m_nodem_alloc;
+				m_comp = other.m_comp;
+				m_root = clone_tree(other.m_root, NULL);
+				m_size = other.m_size;
+			}
 
 			return (*this);
 		}
 		iterator begin()
 		{
-			RBTreeNode<T> *node = _root;
+			Tree<T> *node = m_root;
 			if (!node)
 				return (end());
-			return (iterator(_find_leftmost_node(node)));
+			return (iterator(find_leftmost(node)));
 		}
 		const_iterator begin() const
 		{
-			RBTreeNode<T> *node = _root;
+			Tree<T> *node = m_root;
 			if (!node)
 				return (end());
-			return (const_iterator(_find_leftmost_node(node)));
+			return (const_iterator(find_leftmost(node)));
 		}
 		iterator end()
 		{
-			return (iterator(_end));
+			return (iterator(m_end));
 		}
 		const_iterator end() const
 		{
-			return (const_iterator(_end));
+			return (const_iterator(m_end));
 		}
 		reverse_iterator rbegin()
 		{
@@ -401,34 +133,34 @@ namespace ft
 		}
 		bool empty() const
 		{
-			return (!_root);
+			return (!m_root);
 		}
 		size_type size() const
 		{
-			return (_size);
+			return (m_size);
 		}
 		size_type max_size() const
 		{
-			size_type a = _alloc.max_size();
-			size_type b = _node_alloc.max_size();
+			size_type a = m_alloc.max_size();
+			size_type b = m_nodem_alloc.max_size();
 			return (a < b ? a : b);
 		}
 		pair<iterator, bool> insert(const value_type &value)
 		{
-			RBTreeNode<value_type> *node = _create_node(value);
-			if (_root)
-				_root->parent = NULL;
-			ft::pair<RBTreeNode<value_type>*, bool> res = _bst_insert(node);
+			Tree<value_type> *node = create_tree(value);
+			if (m_root)
+				m_root->parent = NULL;
+			ft::pair<Tree<value_type>*, bool> res = insert_tree(node);
 			if (!res.second) {
-				_clear_node(node);
-				_root->parent = _end;
-				_end->left = _root;
+				clear(node);
+				m_root->parent = m_end;
+				m_end->left = m_root;
 				return (ft::make_pair(iterator(res.first), false));
 			}
-			_balance(node);
-			_root->parent = _end;
-			_end->left = _root;
-			_size++;
+			balance_tree(node);
+			m_root->parent = m_end;
+			m_end->left = m_root;
+			m_size++;
 			return (ft::make_pair(iterator(res.first), true));
 		}
 		iterator insert(iterator position, const value_type &val)
@@ -446,16 +178,16 @@ namespace ft
 		}
 		void erase(iterator position)
 		{
-			RBTreeNode<value_type> *parent = _bst_erase(position.baseNode());
-			if (parent != _end)
-				_balance(parent);
-			if (_size == 1) {
-				_root = NULL;
+			Tree<value_type> *parent = erase_tree(position.baseNode());
+			if (parent != m_end)
+				balance_tree(parent);
+			if (m_size == 1) {
+				m_root = NULL;
 			} else{
-				_root->parent = _end;
-				_end->left = _root;
+				m_root->parent = m_end;
+				m_end->left = m_root;
 			}
-			_size--;
+			m_size--;
 		}
 		size_type erase(const value_type &val)
 		{
@@ -478,44 +210,44 @@ namespace ft
 		}
 		void swap(RBTree &x)
 		{
-			allocator_type         _alloc_tmp = this->_alloc;
-			node_allocator_type    _node_alloc_tmp = this->_node_alloc;
-			value_compare          _comp_tmp = this->_comp;
-			RBTreeNode<value_type> *_root_tmp = this->_root;
-			RBTreeNode<value_type> *_end_tmp = this->_end;
-			size_type              _size_tmp = this->_size;
+			allocator_type			m_alloc_tmp = this->m_alloc;
+			node_allocator_type		m_nodem_alloc_tmp = this->m_nodem_alloc;
+			value_compare			m_comp_tmp = this->m_comp;
+			Tree<value_type>	*m_root_tmp = this->m_root;
+			Tree<value_type>	*m_end_tmp = this->m_end;
+			size_type				m_size_tmp = this->m_size;
 
-			this->_alloc = x._alloc;
-			this->_node_alloc = x._node_alloc;
-			this->_comp = x._comp;
-			this->_root = x._root;
-			this->_end = x._end;
-			this->_size = x._size;
+			this->m_alloc = x.m_alloc;
+			this->m_nodem_alloc = x.m_nodem_alloc;
+			this->m_comp = x.m_comp;
+			this->m_root = x.m_root;
+			this->m_end = x.m_end;
+			this->m_size = x.m_size;
 
-			x._alloc = _alloc_tmp;
-			x._node_alloc = _node_alloc_tmp;
-			x._comp = _comp_tmp;
-			x._root = _root_tmp;
-			x._end = _end_tmp;
-			x._size = _size_tmp;
+			x.m_alloc = m_alloc_tmp;
+			x.m_nodem_alloc = m_nodem_alloc_tmp;
+			x.m_comp = m_comp_tmp;
+			x.m_root = m_root_tmp;
+			x.m_end = m_end_tmp;
+			x.m_size = m_size_tmp;
 		}
 		void clear()
 		{
-			_bst_clear(_root);
-			_root = NULL;
-			_size = 0;
+			clear_tree(m_root);
+			m_root = NULL;
+			m_size = 0;
 		}
-		value_compare value_comp() const
+		value_compare valuem_comp() const
 		{
-			return (_comp);
+			return (m_comp);
 		}
 		iterator find(const value_type &val)
 		{
-			return (iterator(_bst_find(val, _root)));
+			return (iterator(find_tree(val, m_root)));
 		}
 		const_iterator find(const value_type &val) const
 		{
-			return (const_iterator(_bst_find(val, _root)));
+			return (const_iterator(find_tree(val, m_root)));
 		}
 		size_type count(const value_type &val) const
 		{
@@ -524,19 +256,19 @@ namespace ft
 		}
 		iterator lower_bound(const value_type &val)
 		{
-			return (iterator(_bst_lower_bound(val, _root)));
+			return (iterator(lower_bound_tree(val, m_root)));
 		}
 		const_iterator lower_bound(const value_type &val) const
 		{
-			return (const_iterator(_bst_lower_bound(val, _root)));
+			return (const_iterator(lower_bound_tree(val, m_root)));
 		}
 		iterator upper_bound(const value_type &val)
 		{
-			return (iterator(_bst_upper_bound(val, _root)));
+			return (iterator(upper_bound_tree(val, m_root)));
 		}
 		const_iterator upper_bound(const value_type &val) const
 		{
-			return (const_iterator(_bst_upper_bound(val, _root)));
+			return (const_iterator(upper_bound_tree(val, m_root)));
 		}
 		pair<iterator, iterator> equal_range(const value_type &val)
 		{
@@ -548,7 +280,274 @@ namespace ft
 		}
 		allocator_type get_allocator() const
 		{
-			return (_alloc);
+			return (m_alloc);
+		}
+		private:
+		Tree<value_type> *find_leftmost(Tree<value_type> *node) const
+		{
+			while (node && node->left)
+				node = node->left;
+			return (node);
+		}
+		Tree<value_type> *find_rightmost(Tree<value_type> *node) const
+		{
+			while (node && node->right)
+				node = node->right;
+			return (node);
+		}
+		Tree<value_type> *create_tree(const value_type &val)
+		{
+			value_type *p = m_alloc.allocate(1);
+			m_alloc.construct(p, val);
+
+			Tree<value_type> *node = m_nodem_alloc.allocate(1);
+			m_nodem_alloc.construct(node, Tree<value_type>(p));
+
+			return (node);
+		}
+		void clear(Tree<value_type> *node)
+		{
+			if (node->value) {
+				m_alloc.destroy(node->value);
+				m_alloc.deallocate(node->value, 1);
+			}
+			m_nodem_alloc.destroy(node);
+			m_nodem_alloc.deallocate(node, 1);
+		}
+		pair<Tree<value_type>*, bool> insert_tree(Tree<value_type> *node)
+		{
+			if (!m_root) {
+				m_root = node;
+				return (ft::make_pair(node, true));
+			}
+
+			Tree<T> *x = m_root;
+			Tree<T> *y = NULL;
+
+			while (x) {
+				y = x;
+
+				if (m_comp(*x->value, *node->value))
+					x = y->right;
+				else if (m_comp(*node->value, *x->value))
+					x = y->left;
+				else
+					return (ft::make_pair(x, false));
+			}
+
+			node->parent = y;
+
+			if (m_comp(*y->value, *node->value))
+				y->right = node;
+			else
+				y->left = node;
+
+			return (ft::make_pair(node, true));
+			}
+			Tree<value_type> *erase_tree(Tree<value_type> *node){
+				if (!node)
+					return (NULL);
+
+			Tree<value_type> *parent = node->parent;
+
+			if (!node->left && !node->right) {
+				if (parent == m_end) {
+					m_root = NULL;
+				} else if (parent->left == node) {
+					parent->left = NULL;
+				} else {
+					parent->right = NULL;
+				}
+
+				clear(node);
+				return (parent);
+			}
+
+			if (!node->right) {
+				Tree<value_type> *left = node->left;
+
+				if (node->parent == m_end) {
+					m_root = left;
+					left->parent = NULL;
+				} else if (node->parent->left == node) {
+					node->parent->left = left;
+					left->parent = node->parent;
+				} else {
+					node->parent->right = left;
+					left->parent = node->parent;
+				}
+
+				clear(node);
+				return (left);
+			}
+
+			if (!node->left) {
+				Tree<value_type> *right = node->right;
+
+				if (node->parent == m_end) {
+					m_root = right;
+					right->parent = NULL;
+				} else if (node->parent->left == node) {
+					node->parent->left = right;
+					right->parent = node->parent;
+				} else {
+					node->parent->right = right;
+					right->parent = node->parent;
+				}
+
+				clear(node);
+				return (right);
+			}
+
+			Tree<value_type> *prev = find_rightmost(node->left);
+
+			m_alloc.destroy(node->value);
+			m_alloc.construct(node->value, *prev->value);
+
+			return (erase_tree(prev));
+		}
+		void clear_tree(Tree<value_type> *node)
+		{
+			if (!node)
+				return;
+			clear_tree(node->left);
+			clear_tree(node->right);
+			clear(node);
+		}
+		Tree<typename RBTree<T, Compare, Alloc, NodeAlloc>::value_type> *clone_tree(Tree <value_type> *node, Tree <value_type> *parent)
+		{
+			if (!node)
+				return (NULL);
+			Tree<value_type> *new_node = create_tree(*node->value);
+			new_node->parent = parent;
+			new_node->color = node->color;
+			new_node->left = clone_tree(node->left, new_node);
+			new_node->right = clone_tree(node->right, new_node);
+			return (new_node);
+		}
+		Tree<value_type> *find_tree(const value_type &val, Tree<value_type> *node) const
+		{
+			if (!node)
+				return (m_end);
+			if (m_comp(*node->value, val))
+				return (find_tree(val, node->right));
+			else if (m_comp(val, *node->value))
+				return (find_tree(val, node->left));
+			else
+				return (node);
+		}
+		Tree<value_type> *lower_bound_tree(const value_type &val, Tree<value_type> *node) const
+		{
+			if (!node)
+				return (m_end);
+			if (m_comp(*node->value, val))
+				return (lower_bound_tree(val, node->right));
+			else {
+				Tree<value_type> *left = lower_bound_tree(val, node->left);
+				return (left != m_end ? left : node);
+			}
+		}
+		Tree<value_type> *upper_bound_tree(const value_type &val, Tree<value_type> *node) const
+		{
+			if (!node)
+				return (m_end);
+			if (!m_comp(val, *node->value))
+				return (upper_bound_tree(val, node->right));
+			else {
+				Tree<value_type> *left = upper_bound_tree(val, node->left);
+				return (left != m_end ? left : node);
+			}
+		}
+		void rotate_left(Tree<value_type> *node)
+		{
+			Tree<value_type> *right = node->right;
+			node->right = right->left;
+
+			if (node->right)
+				node->right->parent = node;
+
+			right->parent = node->parent;
+
+			if (!node->parent)
+				m_root = right;
+			else if (node == node->parent->left)
+				node->parent->left = right;
+			else
+				node->parent->right = right;
+
+			right->left = node;
+			node->parent = right;
+		}
+		void rotate_right(Tree<value_type> *node)
+		{
+			Tree<value_type> *left = node->left;
+			node->left = left->right;
+
+			if (node->left)
+				node->left->parent = node;
+
+			left->parent = node->parent;
+
+			if (!node->parent)
+				m_root = left;
+			else if (node == node->parent->left)
+				node->parent->left = left;
+			else
+				node->parent->right = left;
+
+			left->right = node;
+			node->parent = left;
+		}
+		void balance_tree(Tree<value_type> *node)
+		{
+			Tree<value_type> *parent;
+			Tree<value_type> *grandparent;
+
+			while (node != m_root && node->color && node->parent->color) {
+				parent = node->parent;
+				grandparent = node->parent->parent;
+
+				if (parent == grandparent->left) {
+					Tree<value_type> *uncle = grandparent->right;
+
+					if (uncle && uncle->color) {
+						grandparent->color = true;
+						parent->color = false;
+						uncle->color = false;
+						node = grandparent;
+					} else {
+						if (node == parent->right) {
+							rotate_left(parent);
+							node = parent;
+							parent = node->parent;
+						}
+
+						rotate_right(grandparent);
+						ft::swap(parent->color, grandparent->color);
+						node = parent;
+					}
+				} else {
+					Tree<value_type> *uncle = grandparent->left;
+
+					if (uncle && uncle->color) {
+						grandparent->color = true;
+						parent->color = false;
+						uncle->color = false;
+						node = grandparent;
+					} else {
+						if (node == parent->left) {
+							rotate_right(parent);
+							node = parent;
+							parent = node->parent;
+						}
+
+						rotate_left(grandparent);
+						ft::swap(parent->color, grandparent->color);
+						node = parent;
+					}
+				}
+			}
+			m_root->color = false;
 		}
 	};
 
