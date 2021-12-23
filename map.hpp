@@ -43,12 +43,12 @@ namespace ft {
 		RBTree<value_type, value_compare, allocator_type> _tree;
 
 	public:
-		typedef typename RBTree<value_type, value_compare, allocator_type>::iterator               iterator;
-		typedef typename RBTree<value_type, value_compare, allocator_type>::const_iterator         const_iterator;
-		typedef typename RBTree<value_type, value_compare, allocator_type>::reverse_iterator       reverse_iterator;
-		typedef typename RBTree<value_type, value_compare, allocator_type>::const_reverse_iterator const_reverse_iterator;
-		typedef typename RBTree<value_type, value_compare, allocator_type>::difference_type        difference_type;
-		typedef typename RBTree<value_type, value_compare, allocator_type>::size_type              size_type;
+		typedef typename RBTree<value_type, value_compare, allocator_type>::iterator				iterator;
+		typedef typename RBTree<value_type, value_compare, allocator_type>::const_iterator			const_iterator;
+		typedef typename RBTree<value_type, value_compare, allocator_type>::reverse_iterator		reverse_iterator;
+		typedef typename RBTree<value_type, value_compare, allocator_type>::const_reverse_iterator	const_reverse_iterator;
+		typedef typename RBTree<value_type, value_compare, allocator_type>::difference_type			difference_type;
+		typedef typename RBTree<value_type, value_compare, allocator_type>::size_type				size_type;
 
 		explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
 		: _tree(RBTree<value_type, value_compare, allocator_type>(value_compare(comp), allocator_type(alloc)))
