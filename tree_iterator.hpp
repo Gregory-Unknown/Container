@@ -1,10 +1,15 @@
-	#ifndef TREE_ITERATOR_HPP
-	#define TREE_ITERATOR_HPP
+#ifndef TREE_ITERATOR_HPP
+#define TREE_ITERATOR_HPP
 
-	#include "Iterator.hpp"
-	#include "map.hpp"
+#include "Iterator.hpp"
+#include "map.hpp"
 
-	namespace ft {
+namespace ft {
+	//template<typename Key, typename T, typename Compare = std::less<Key>, typename Alloc = std::allocator< ft::pair<const Key, T> > > class Map;
+	template<typename T> struct Tree;
+}
+
+namespace ft {
 
 	template<typename T, typename Pointer, typename Reference>
 	class rb_tree_iterator {

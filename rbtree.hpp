@@ -2,8 +2,8 @@
 # define FT_CONTAINERS_RB_TREE_HPP
 
 namespace ft {
-    template<typename T, typename Compare, typename Alloc, typename NodeAlloc> class RBTree;
-    template<typename T> struct Tree;
+	template<typename T, typename Compare, typename Alloc, typename NodeAlloc> class RBTree;
+	template<typename T> struct Tree;
 }
 
 # include <memory>
@@ -335,21 +335,20 @@ namespace ft
 					return (ft::make_pair(x, false));
 			}
 
-			node->parent = y;
+				node->parent = y;
 
-			if (m_comp(*y->value, *node->value))
-				y->right = node;
-			else
-				y->left = node;
+				if (m_comp(*y->value, *node->value))
+					y->right = node;
+				else
+					y->left = node;
 
-			return (ft::make_pair(node, true));
-			}
-			Tree<value_type> *erase_tree(Tree<value_type> *node){
-				if (!node)
-					return (NULL);
-
+				return (ft::make_pair(node, true));
+		}
+		Tree<value_type> *erase_tree(Tree<value_type> *node)
+		{
+			if (!node)
+				return (NULL);
 			Tree<value_type> *parent = node->parent;
-
 			if (!node->left && !node->right) {
 				if (parent == m_end) {
 					m_root = NULL;
@@ -358,14 +357,11 @@ namespace ft
 				} else {
 					parent->right = NULL;
 				}
-
 				clear(node);
 				return (parent);
 			}
-
 			if (!node->right) {
 				Tree<value_type> *left = node->left;
-
 				if (node->parent == m_end) {
 					m_root = left;
 					left->parent = NULL;
@@ -376,14 +372,11 @@ namespace ft
 					node->parent->right = left;
 					left->parent = node->parent;
 				}
-
 				clear(node);
 				return (left);
 			}
-
 			if (!node->left) {
 				Tree<value_type> *right = node->right;
-
 				if (node->parent == m_end) {
 					m_root = right;
 					right->parent = NULL;
@@ -394,13 +387,10 @@ namespace ft
 					node->parent->right = right;
 					right->parent = node->parent;
 				}
-
 				clear(node);
 				return (right);
 			}
-
 			Tree<value_type> *prev = find_rightmost(node->left);
-
 			m_alloc.destroy(node->value);
 			m_alloc.construct(node->value, *prev->value);
 

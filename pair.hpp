@@ -5,11 +5,6 @@
 
 namespace ft {
 
-	/**
-	 * Pair of values
-	 * @tparam T1 Type of member first
-	 * @tparam T2 Type of member second
-	 */
 	template<typename T1, typename T2>
 	struct pair {
 		typedef T1 first_type;
