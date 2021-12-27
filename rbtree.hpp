@@ -38,20 +38,21 @@ namespace ft
 	class RBTree
 	{
 		public:
-		typedef T										value_type;
-		typedef Alloc									allocator_type;
-		typedef NodeAlloc								node_allocator_type;
-		typedef Compare									value_compare;
-		typedef rb_tree_iterator<T, T*, T&>				iterator;
-		typedef rb_tree_iterator<T, const T*, const T&>	const_iterator;
-		typedef ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-		typedef ptrdiff_t								difference_type;
-		typedef size_t									size_type;
+		typedef T														value_type;
+		typedef typename Alloc::template rebind<value_type >::other		allocator_type;
+		typedef Tree<value_type>										node;
+		typedef typename NodeAlloc::template rebind<node >::other		node_allocator_type;
+		typedef Compare													value_compare;
+		typedef rb_tree_iterator<value_type, value_type*, value_type&>	iterator;
+		typedef rb_tree_iterator<T, const T*, const T&>					const_iterator;
+		typedef ft::reverse_iterator<iterator>							reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		typedef ptrdiff_t												difference_type;
+		typedef size_t													size_type;
 
 		private:
 		allocator_type			m_alloc;
-		node_allocator_type		m_nodem_alloc;
+		node_allocator_type		m_node_alloc;
 		value_compare			m_comp;
 		Tree<value_type>		*m_root;
 		Tree<value_type>		*m_end;
@@ -59,17 +60,17 @@ namespace ft
 
 		public:
 		RBTree(const value_compare &comp = value_compare(), const allocator_type &alloc = allocator_type(), const node_allocator_type &nodem_alloc = node_allocator_type())
-		: m_alloc(alloc), m_nodem_alloc(nodem_alloc), m_comp(comp), m_root(NULL), m_size(0)
+		: m_alloc(alloc), m_node_alloc(nodem_alloc), m_comp(comp), m_root(NULL), m_size(0)
 		{
-			m_end = m_nodem_alloc.allocate(1);
-			m_nodem_alloc.construct(m_end, Tree<value_type>(NULL));
+			m_end = m_node_alloc.allocate(1);
+			m_node_alloc.construct(m_end, Tree<value_type>(NULL));
 		}
 		RBTree(const RBTree &src)
-		:m_alloc(src.m_alloc), m_nodem_alloc(src.m_nodem_alloc), m_comp(src.m_comp), m_root(NULL), m_size(src.m_size)
+		:m_alloc(src.m_alloc), m_node_alloc(src.m_node_alloc), m_comp(src.m_comp), m_root(NULL), m_size(src.m_size)
 		{
 			m_root = clone_tree(src.m_root, NULL);
-			m_end = m_nodem_alloc.allocate(1);
-			m_nodem_alloc.construct(m_end, Tree<value_type>(NULL));
+			m_end = m_node_alloc.allocate(1);
+			m_node_alloc.construct(m_end, Tree<value_type>(NULL));
 			if (m_root) {
 				m_root->parent = m_end;
 				m_end->left = m_root;
@@ -85,7 +86,7 @@ namespace ft
 			if (this == &other) {
 				clear();
 				m_alloc = other.m_alloc;
-				m_nodem_alloc = other.m_nodem_alloc;
+				m_node_alloc = other.m_node_alloc;
 				m_comp = other.m_comp;
 				m_root = clone_tree(other.m_root, NULL);
 				m_size = other.m_size;
@@ -142,7 +143,7 @@ namespace ft
 		size_type max_size() const
 		{
 			size_type a = m_alloc.max_size();
-			size_type b = m_nodem_alloc.max_size();
+			size_type b = m_node_alloc.max_size();
 			return (a < b ? a : b);
 		}
 		pair<iterator, bool> insert(const value_type &value)
@@ -211,21 +212,21 @@ namespace ft
 		void swap(RBTree &x)
 		{
 			allocator_type			m_alloc_tmp = this->m_alloc;
-			node_allocator_type		m_nodem_alloc_tmp = this->m_nodem_alloc;
+			node_allocator_type		m_node_alloc_tmp = this->m_node_alloc;
 			value_compare			m_comp_tmp = this->m_comp;
 			Tree<value_type>	*m_root_tmp = this->m_root;
 			Tree<value_type>	*m_end_tmp = this->m_end;
 			size_type				m_size_tmp = this->m_size;
 
 			this->m_alloc = x.m_alloc;
-			this->m_nodem_alloc = x.m_nodem_alloc;
+			this->m_node_alloc = x.m_node_alloc;
 			this->m_comp = x.m_comp;
 			this->m_root = x.m_root;
 			this->m_end = x.m_end;
 			this->m_size = x.m_size;
 
 			x.m_alloc = m_alloc_tmp;
-			x.m_nodem_alloc = m_nodem_alloc_tmp;
+			x.m_node_alloc = m_node_alloc_tmp;
 			x.m_comp = m_comp_tmp;
 			x.m_root = m_root_tmp;
 			x.m_end = m_end_tmp;
@@ -300,8 +301,8 @@ namespace ft
 			value_type *p = m_alloc.allocate(1);
 			m_alloc.construct(p, val);
 
-			Tree<value_type> *node = m_nodem_alloc.allocate(1);
-			m_nodem_alloc.construct(node, Tree<value_type>(p));
+			Tree<value_type> *node = m_node_alloc.allocate(1);
+			m_node_alloc.construct(node, Tree<value_type>(p));
 
 			return (node);
 		}
@@ -311,8 +312,8 @@ namespace ft
 				m_alloc.destroy(node->value);
 				m_alloc.deallocate(node->value, 1);
 			}
-			m_nodem_alloc.destroy(node);
-			m_nodem_alloc.deallocate(node, 1);
+			m_node_alloc.destroy(node);
+			m_node_alloc.deallocate(node, 1);
 		}
 		pair<Tree<value_type>*, bool> insert_tree(Tree<value_type> *node)
 		{
