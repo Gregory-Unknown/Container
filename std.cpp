@@ -3,6 +3,7 @@
 #include <iterator>
 #include <ctime>
 #include <stack>
+#include <map>
 
 unsigned int std_start_time =  clock();
 unsigned int std_end_time = 0;
@@ -17,10 +18,10 @@ void std_constructor()
 	std::vector<int> std_fourth (std_third);
 
 	int std_ints[] = {16,2,77,29};
-	std::vector<int> std_fifth (std_ints, std_ints + sizeof(std_ints) / sizeof(int) );
+	std::vector<int> std_fistdh (std_ints, std_ints + sizeof(std_ints) / sizeof(int) );
 
-	std::cout << "The contents of std_fifth are:";
-	for (std::vector<int>::iterator it = std_fifth.begin(); it != std_fifth.end(); ++it)
+	std::cout << "The contents of std_fistdh are:";
+	for (std::vector<int>::iterator it = std_fistdh.begin(); it != std_fistdh.end(); ++it)
 		std::cout << ' ' << *it;
 	std::cout << '\n';
 
@@ -296,8 +297,8 @@ void std_insert()
 {
 	unsigned int std_tmp_time =  clock();
 
-	ft::vector<int> std_vector (3,100);
-	ft::vector<int>::iterator iter;
+	std::vector<int> std_vector (3,100);
+	std::vector<int>::iterator iter;
 	std::cout << "std_vector contains 1 :";
 	for (iter = std_vector.begin(); iter < std_vector.end(); iter++)
 		std::cout << ' ' << *iter;
@@ -320,7 +321,7 @@ void std_insert()
 
 	iter = std_vector.begin();
 
-	ft::vector<int> anothervector1 (2,400);
+	std::vector<int> anothervector1 (2,400);
 	std_vector.insert (iter + 2,anothervector1.begin(), anothervector1.end());
 
 	std::cout << "std_vector contains 4 :";
@@ -521,6 +522,60 @@ void std_stack_push_and_pop()
 		std_stack.pop();
 	}
 	std::cout << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_contructor()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> first;
+
+	first['a']=10;
+	first['b']=30;
+	first['c']=50;
+	first['d']=70;
+
+	std::map<char,int> second (first.begin(),first.end());
+
+	std::map<char,int> third (second);
+
+	for (std::map<char,int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (std::map<char,int>::iterator it = second.begin(); it != second.end(); ++it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (std::map<char,int>::iterator it = third.begin(); it != third.end(); ++it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_equal_operator()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> first;
+	std::map<char,int> second;
+
+	first['x']=8;
+	first['y']=16;
+	first['z']=32;
+
+	second = first;
+	first = std::map<char,int>();
+	std::cout << std::endl;
+	std::cout << "std size of first: " << first.size() << '\n';
+	std::cout << "std size of second: " << second.size() << '\n';
+	std::cout << std::endl;
+	for (std::map<char,int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (std::map<char,int>::iterator it = second.begin(); it != second.end(); ++it) {
+		std::cout << it->first << " => " << it->second << std::endl;
+	}
 
 	std_end_time += (clock() - std_tmp_time);
 }

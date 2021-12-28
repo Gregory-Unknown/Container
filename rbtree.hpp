@@ -38,17 +38,17 @@ namespace ft
 	class RBTree
 	{
 		public:
-		typedef T														value_type;
-		typedef typename Alloc::template rebind<value_type >::other		allocator_type;
-		typedef Tree<value_type>										node;
-		typedef typename NodeAlloc::template rebind<node >::other		node_allocator_type;
-		typedef Compare													value_compare;
-		typedef rb_tree_iterator<value_type, value_type*, value_type&>	iterator;
-		typedef rb_tree_iterator<T, const T*, const T&>					const_iterator;
-		typedef ft::reverse_iterator<iterator>							reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
-		typedef ptrdiff_t												difference_type;
-		typedef size_t													size_type;
+		typedef T																	value_type;
+		typedef typename Alloc::template rebind<value_type >::other					allocator_type;
+		typedef Tree<value_type>													node;
+		typedef typename NodeAlloc::template rebind<node >::other					node_allocator_type;
+		typedef Compare																value_compare;
+		typedef rb_tree_iterator<value_type, value_type*, value_type&>				iterator;
+		typedef rb_tree_iterator<value_type, const value_type*, const value_type&>	const_iterator;
+		typedef ft::reverse_iterator<iterator>										reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>								const_reverse_iterator;
+		typedef ptrdiff_t															difference_type;
+		typedef size_t																size_type;
 
 		private:
 		allocator_type			m_alloc;

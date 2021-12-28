@@ -2,6 +2,7 @@
 #include "vector.hpp"
 #include <ctime>
 #include "stack.hpp"
+#include "map.hpp"
 
 unsigned int ft_start_time =  clock();
 unsigned int ft_end_time = 0;
@@ -516,6 +517,60 @@ void ft_stack_push_and_pop()
 		ft_stack4.pop();
 	}
 	std::cout << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+
+void ft_map_contructor()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> first;
+
+	first['a']=10;
+	first['b']=30;
+	first['c']=50;
+	first['d']=70;
+
+	ft::map<char,int> second (first.begin(),first.end());
+
+	ft::map<char,int> third (second);
+	for (ft::map<char,int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "ft " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (ft::map<char,int>::iterator it = second.begin(); it != second.end(); ++it) {
+		std::cout << "ft " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (ft::map<char,int>::iterator it = third.begin(); it != third.end(); ++it) {
+		std::cout << "ft " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_equal_operator()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> first;
+	ft::map<char,int> second;
+
+	first['x']=8;
+	first['y']=16;
+	first['z']=32;
+
+	second = first;
+	first = ft::map<char,int>();
+	std::cout << std::endl;
+	std::cout << "ft size of first: " << first.size() << '\n';
+	std::cout << "ft size of second: " << second.size() << '\n';
+	std::cout << std::endl;
+		for (ft::map<char,int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (ft::map<char,int>::iterator it = second.begin(); it != second.end(); ++it) {
+		std::cout << it->first << " => " << it->second << std::endl;
+	}
 
 	ft_end_time += (clock() - ft_tmp_time);
 }

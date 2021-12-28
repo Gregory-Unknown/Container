@@ -2,7 +2,7 @@
 #include <ctime>
 #include "ft.cpp"
 #include "std.cpp"
-#include<map>
+#include <map>
 #include "map.hpp"
 
 int main()
@@ -109,42 +109,19 @@ int main()
 	// std::cout << "Stack_push_and_pop" << std::endl;
 	// std_stack_push_and_pop();
 	// ft_stack_push_and_pop();
+	std::cout << "Map" << std::endl;
 
-	// std::cout << "TIME "<< std::endl;
-	// std::map<int, std::string> m;
-	ft::map<int, std::string> a;
-	// a.test_show_map();
-	a.insert(ft::pair<int, std::string>(8, "a"));
+	std::cout << "Map contructor :" << std::endl;
+	std_map_contructor();
+	ft_map_contructor();
 
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(11, "b"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(20, "c"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(25, "d"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(30, "e"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(19, "f"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(8, "g"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	a.insert(ft::pair<int, std::string>(17, "k"));
-
-	std::cout << "-------------------------------------------------" << std::endl;
-	// a.test_show_map();
+	std::cout << "Map equal operator :" << std::endl;
+	std_map_equal_operator();
+	ft_map_equal_operator();
 	unsigned int std_search_time = std_time();
 	unsigned int ft_search_time = ft_time();
 
-	for (ft::map<int, std::string>::reverse_iterator it = a.rbegin(); it != a.rend(); ++it)
-		std::cout << it->first << " => " << it->second << '\n';
-	return 0;
+	std::cout << "TIME "<< std::endl;
 
 	std::cout << "STD_TIME " << std_search_time << std::endl;
 	std::cout << "FT_TIME  " << ft_search_time << std::endl;

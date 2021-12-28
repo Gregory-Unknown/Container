@@ -72,9 +72,8 @@ namespace ft {
 		}
 		map &operator=(const map &other)
 		{
-			if (this == &other)
-				return (*this);
-			m_tree = other.m_tree;
+			if (this != &other)
+				m_tree = other.m_tree;
 			return (*this);
 		}
 		iterator begin()
