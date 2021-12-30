@@ -179,7 +179,7 @@ namespace ft
 		}
 		void erase(iterator position)
 		{
-			Tree<value_type> *parent = erase_tree(position.baseNode());
+			Tree<value_type> *parent = erase_tree(position.geter());
 			if (parent != m_end)
 				balance_tree(parent);
 			if (m_size == 1) {
@@ -214,8 +214,8 @@ namespace ft
 			allocator_type			m_alloc_tmp = this->m_alloc;
 			node_allocator_type		m_node_alloc_tmp = this->m_node_alloc;
 			value_compare			m_comp_tmp = this->m_comp;
-			Tree<value_type>	*m_root_tmp = this->m_root;
-			Tree<value_type>	*m_end_tmp = this->m_end;
+			Tree<value_type>		*m_root_tmp = this->m_root;
+			Tree<value_type>		*m_end_tmp = this->m_end;
 			size_type				m_size_tmp = this->m_size;
 
 			this->m_alloc = x.m_alloc;

@@ -579,6 +579,145 @@ void std_map_equal_operator()
 
 	std_end_time += (clock() - std_tmp_time);
 }
+void std_map_iterator()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> first;
+
+	first['a']=10;
+	first['b']=30;
+	first['c']=50;
+	first['d']=70;
+	first['e']=10;
+	first['f']=30;
+	first['g']=50;
+	first['h']=70;
+
+	for (std::map<char,int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	std::map<char,int>::iterator tmp = first.end();
+	--tmp;
+	for (std::map<char,int>::iterator it = tmp; it != first.begin(); --it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (std::map<char,int>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+
+	std::map<char,int>::reverse_iterator tmp2 = first.rend();
+	--tmp2;
+	for (std::map<char,int>::reverse_iterator it = tmp2; it != first.rbegin(); --it) {
+		std::cout << "std " << it->first << " => " << it->second << std::endl;
+	}
+
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_empty()
+{
+	std::map<char,int> mymap;
+
+	mymap['a']=10;
+	mymap['b']=20;
+	mymap['c']=30;
+
+	while (!mymap.empty())
+	{
+		std::cout << mymap.begin()->first << " => " << mymap.begin()->second << '\n';
+		mymap.erase(mymap.begin());
+	}
+}
+void std_map_size()
+{
+	std::map<char,int> mymap;
+	mymap['a']=101;
+	mymap['b']=202;
+	mymap['c']=302;
+
+	std::cout << "mymap.size() is " << mymap.size() << '\n';
+}
+void std_map_max_size()
+{
+	int i;
+	std::map<int,int> mymap;
+
+	if (mymap.max_size()>1000)
+	{
+		for (i=0; i<1000; i++) mymap[i]=0;
+		std::cout << "The map contains 1000 elements.\n";
+	}
+	else std::cout << "The map could not hold 1000 elements.\n";
+}
+void std_map_operator_index()
+{
+	std::map<char,std::string> mymap;
+
+	mymap['a']="an element";
+	mymap['b']="another element";
+	mymap['c']=mymap['b'];
+
+	std::cout << "mymap['a'] is " << mymap['a'] << '\n';
+	std::cout << "mymap['b'] is " << mymap['b'] << '\n';
+	std::cout << "mymap['c'] is " << mymap['c'] << '\n';
+	std::cout << "mymap['d'] is " << mymap['d'] << '\n';
+
+	std::cout << "std map now contains " << mymap.size() << " elements.\n";
+}
+void std_map_insert()
+{
+	std::cout << "STD" << std::endl;
+	std::map<char,int> mymap;
+
+	mymap.insert ( std::pair<char,int>('a',100) );
+	mymap.insert ( std::pair<char,int>('z',200) );
+
+	std::pair<std::map<char,int>::iterator,bool> ret;
+	ret = mymap.insert ( std::pair<char,int>('z',500) );
+	if (ret.second==false) {
+		std::cout << "element 'z' already existed";
+		std::cout << " with a value of " << ret.first->second << '\n';
+	}
+
+	std::map<char,int>::iterator it = mymap.begin();
+	mymap.insert (it, std::pair<char,int>('b',300));
+	mymap.insert (it, std::pair<char,int>('c',400));
+
+	std::map<char,int> anothermap;
+	anothermap.insert(mymap.begin(),mymap.find('c'));
+
+	std::cout << "mymap contains:\n";
+	for (it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	std::cout << "anothermap contains:\n";
+	for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+}
+void std_map_erase()
+{
+	std::map<char,int> mymap;
+	std::map<char,int>::iterator it;
+
+	mymap['a']=10;
+	mymap['b']=20;
+	mymap['c']=30;
+	mymap['d']=40;
+	mymap['e']=50;
+	mymap['f']=60;
+
+	it=mymap.find('b');
+	mymap.erase (it);
+
+	mymap.erase ('c');
+	it=mymap.find ('e');
+	mymap.erase ( it, mymap.end() );
+
+	for (it = mymap.begin(); it != mymap.end(); ++it)
+		std::cout << "STD " << it->first << " => " << it->second << '\n';
+}
 unsigned int std_time()
 {
 	return (std_end_time - std_start_time);

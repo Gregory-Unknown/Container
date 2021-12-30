@@ -24,8 +24,8 @@ namespace ft {
 			typedef typename allocator_type::const_reference					const_reference;
 			typedef typename allocator_type::pointer							pointer;
 			typedef typename allocator_type::const_pointer						const_pointer;
-			typedef ft::vector_iterator <T, T*, T&>									iterator;
-			typedef ft::vector_iterator <T, const T*, const T&>						const_iterator;
+			typedef ft::vector_iterator <T, T*, T&>								iterator;
+			typedef ft::vector_iterator <T, const T*, const T&>					const_iterator;
 			typedef ft::reverse_iterator<iterator>								reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>						const_reverse_iterator;
 			typedef typename iterator_traits<iterator>::difference_type			difference_type;
@@ -45,7 +45,7 @@ namespace ft {
 			: m_data(0), m_capacity(2 * n), m_size(n), m_alloc(alloc)
 			{
 				m_data = m_alloc.allocate(m_capacity);
-				for (size_type i = 0; i < n; ++i) {
+				for (size_type i = 0; i < m_size; ++i) {
 					m_alloc.construct(m_data + i, val);
 				}
 			}
