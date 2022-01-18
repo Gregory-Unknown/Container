@@ -706,12 +706,12 @@ void ft_map_erase()
 	mymap['e']=50;
 	mymap['f']=60;
 
-	// it=mymap.find('b');
-	// mymap.erase (it);
+	it=mymap.find('b');
+	mymap.erase (it);
 
 	mymap.erase ('c');
-	// it=mymap.find ('e');
-	// mymap.erase ( it, mymap.end() );
+	it=mymap.find ('e');
+	mymap.erase ( it, mymap.end() );
 
 	for (it=mymap.begin(); it!=mymap.end(); ++it)
 		std::cout << "FT " << it->first << " => " << it->second << '\n';

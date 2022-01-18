@@ -391,10 +391,9 @@ namespace ft
 				clear(node);
 				return (right);
 			}
-			Tree<value_type> *prev = find_rightmost(node->left);
+			Tree<value_type> *prev = find_leftmost(node->right);
 			m_alloc.destroy(node->value);
 			m_alloc.construct(node->value, *prev->value);
-
 			return (erase_tree(prev));
 		}
 		void clear_tree(Tree<value_type> *node)
