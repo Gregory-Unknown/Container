@@ -147,6 +147,34 @@ int main()
 	std_map_erase();
 	ft_map_erase();
 
+	std::cout << "Map clear:" << std::endl;
+	std_map_clear();
+	ft_map_clear();
+
+	std::cout << "Map key comp:" << std::endl;
+	std_map_key_comp();
+	ft_map_key_comp();
+
+	std::cout << "Map value comp:" << std::endl;
+	std_map_value_comp();
+	ft_map_value_comp();
+
+	std::cout << "Map find:" << std::endl;
+	std_map_find();
+	ft_map_find();
+
+	std::cout << "Map count:" << std::endl;
+	std_map_count();
+	ft_map_count();
+
+	std::cout << "Map lower bound:" << std::endl;
+	std_map_lower_bound();
+	ft_map_lower_bound();
+
+	std::cout << "Map upper bound:" << std::endl;
+	std_map_upper_bound();
+	ft_map_upper_bound();
+
 	unsigned int std_search_time = std_time();
 	unsigned int ft_search_time = ft_time();
 

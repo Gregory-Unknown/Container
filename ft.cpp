@@ -615,6 +615,7 @@ void ft_map_iterator()
 }
 void ft_map_empty()
 {
+	unsigned int ft_tmp_time =  clock();
 	ft::map<char,int> mymap;
 
 	mymap['a']=10;
@@ -626,18 +627,22 @@ void ft_map_empty()
 		std::cout << mymap.begin()->first << " => " << mymap.begin()->second << '\n';
 		mymap.erase(mymap.begin());
 	}
+	ft_end_time += (clock() - ft_tmp_time);
 }
 void ft_map_size()
 {
+	unsigned int ft_tmp_time =  clock();
 	ft::map<char,int> mymap;
 	mymap['a']=101;
 	mymap['b']=202;
 	mymap['c']=302;
 
 	std::cout << "mymap.size() is " << mymap.size() << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
 }
 void ft_map_max_size()
 {
+	unsigned int ft_tmp_time =  clock();
 	int i;
 	ft::map<int,int> mymap;
 
@@ -647,9 +652,11 @@ void ft_map_max_size()
 		std::cout << "The map contains 1000 elements.\n";
 	}
 	else std::cout << "The map could not hold 1000 elements.\n";
+	ft_end_time += (clock() - ft_tmp_time);
 }
 void ft_map_operator_index()
 {
+	unsigned int ft_tmp_time =  clock();
 	ft::map<char,std::string> mymap;
 
 	mymap['a']="an element";
@@ -662,9 +669,11 @@ void ft_map_operator_index()
 	std::cout << "mymap['d'] is " << mymap['d'] << '\n';
 
 	std::cout << "ft map now contains " << mymap.size() << " elements.\n";
+	ft_end_time += (clock() - ft_tmp_time);
 }
 void ft_map_insert()
 {
+	unsigned int ft_tmp_time =  clock();
 	std::cout << "FT" << std::endl;
 	ft::map<char,int> mymap;
 
@@ -678,7 +687,6 @@ void ft_map_insert()
 		std::cout << " with a value of " << ret.first->second << '\n';
 	}
 
-	// second insert function version (with hint position):
 	ft::map<char,int>::iterator it = mymap.begin();
 	mymap.insert (it, ft::pair<char,int>('b',300));
 	mymap.insert (it, ft::pair<char,int>('c',400));
@@ -693,9 +701,12 @@ void ft_map_insert()
 	std::cout << "anothermap contains:\n";
 	for (it=anothermap.begin(); it!=anothermap.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
 }
 void ft_map_erase()
 {
+	unsigned int ft_tmp_time =  clock();
+	std::cout << "FT" << std::endl;
 	ft::map<char,int> mymap;
 	ft::map<char,int>::iterator it;
 
@@ -715,6 +726,136 @@ void ft_map_erase()
 
 	for (it=mymap.begin(); it!=mymap.end(); ++it)
 		std::cout << "FT " << it->first << " => " << it->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_swap()
+{
+	unsigned int ft_tmp_time =  clock();
+	std::cout << "FT" << std::endl;
+	ft::map<char,int> foo,bar;
+
+	foo['x']=100;
+	foo['y']=200;
+
+	bar['a']=11;
+	bar['b']=22;
+	bar['c']=33;
+
+	foo.swap(bar);
+
+	std::cout << "foo contains:\n";
+	for (ft::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	std::cout << "bar contains:\n";
+	for (ft::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_clear()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+
+	mymap['x']=100;
+	mymap['y']=200;
+	mymap['z']=300;
+
+	std::cout << "ft map contains:\n";
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	mymap.clear();
+	mymap['a']=1101;
+	mymap['b']=2202;
+
+	std::cout << "ft map contains:\n";
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_key_comp()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+
+	ft::map<char,int>::key_compare mycomp = mymap.key_comp();
+
+	mymap['a']=100;
+	mymap['b']=200;
+	mymap['c']=300;
+
+	std::cout << "mymap contains:\n";
+
+	char highest = mymap.rbegin()->first;     // key value of last element
+
+	ft::map<char,int>::iterator it = mymap.begin();
+	do {
+		std::cout << it->first << " => " << it->second << '\n';
+	} while ( mycomp((*it++).first, highest) );
+
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_value_comp()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+
+	mymap['x']=1001;
+	mymap['y']=2002;
+	mymap['z']=3003;
+
+	std::cout << "ft map contains:\n";
+
+	ft::pair<char,int> highest = *mymap.rbegin();
+
+	ft::map<char,int>::iterator it = mymap.begin();
+	do {
+		std::cout << it->first << " => " << it->second << '\n';
+	} while ( mymap.value_comp()(*it++, highest) );
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_find()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator it;
+
+	mymap['a']=50;
+	mymap['b']=100;
+	mymap['c']=150;
+	mymap['d']=200;
+
+	it = mymap.find('b');
+	if (it != mymap.end())
+		mymap.erase (it);
+
+	std::cout << "elements in ft map:" << '\n';
+	std::cout << "a => " << mymap.find('a')->second << '\n';
+	std::cout << "c => " << mymap.find('c')->second << '\n';
+	std::cout << "d => " << mymap.find('d')->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_count()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+	char c;
+
+	mymap ['a']=101;
+	mymap ['c']=202;
+	mymap ['f']=303;
+
+	for (c='a'; c<'h'; c++)
+	{
+		std::cout << c;
+		if (mymap.count(c) > 0)
+			std::cout << " is an element of ft map.\n";
+		else
+			std::cout << " is not an element of ft map.\n";
+	}
+	ft_end_time += (clock() - ft_tmp_time);
 }
 unsigned int ft_time()
 {

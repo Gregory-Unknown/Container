@@ -581,7 +581,7 @@ void std_map_equal_operator()
 }
 void std_map_iterator()
 {
-	unsigned int std_tmp_time =  clock();
+	unsigned int std_tmp_time = clock();
 	std::map<char,int> first;
 
 	first['a']=10;
@@ -618,6 +618,7 @@ void std_map_iterator()
 }
 void std_map_empty()
 {
+	unsigned int std_tmp_time = clock();
 	std::map<char,int> mymap;
 
 	mymap['a']=10;
@@ -629,18 +630,22 @@ void std_map_empty()
 		std::cout << mymap.begin()->first << " => " << mymap.begin()->second << '\n';
 		mymap.erase(mymap.begin());
 	}
+	std_end_time += (clock() - std_tmp_time);
 }
 void std_map_size()
 {
+	unsigned int std_tmp_time = clock();
 	std::map<char,int> mymap;
 	mymap['a']=101;
 	mymap['b']=202;
 	mymap['c']=302;
 
 	std::cout << "mymap.size() is " << mymap.size() << '\n';
+	std_end_time += (clock() - std_tmp_time);
 }
 void std_map_max_size()
 {
+	unsigned int std_tmp_time = clock();
 	int i;
 	std::map<int,int> mymap;
 
@@ -650,9 +655,11 @@ void std_map_max_size()
 		std::cout << "The map contains 1000 elements.\n";
 	}
 	else std::cout << "The map could not hold 1000 elements.\n";
+	std_end_time += (clock() - std_tmp_time);
 }
 void std_map_operator_index()
 {
+	unsigned int std_tmp_time = clock();
 	std::map<char,std::string> mymap;
 
 	mymap['a']="an element";
@@ -665,9 +672,11 @@ void std_map_operator_index()
 	std::cout << "mymap['d'] is " << mymap['d'] << '\n';
 
 	std::cout << "std map now contains " << mymap.size() << " elements.\n";
+	std_end_time += (clock() - std_tmp_time);
 }
 void std_map_insert()
 {
+	unsigned int std_tmp_time = clock();
 	std::cout << "STD" << std::endl;
 	std::map<char,int> mymap;
 
@@ -695,9 +704,11 @@ void std_map_insert()
 	std::cout << "anothermap contains:\n";
 	for (it=anothermap.begin(); it!=anothermap.end(); ++it)
 		std::cout << it->first << " => " << it->second << '\n';
+	std_end_time += (clock() - std_tmp_time);
 }
 void std_map_erase()
 {
+	unsigned int std_tmp_time = clock();
 	std::map<char,int> mymap;
 	std::map<char,int>::iterator it;
 
@@ -717,6 +728,136 @@ void std_map_erase()
 
 	for (it = mymap.begin(); it != mymap.end(); ++it)
 		std::cout << "STD " << it->first << " => " << it->second << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_swap()
+{
+	unsigned int std_tmp_time = clock();
+	std::cout << "STD" << std::endl;
+	std::map<char,int> foo,bar;
+
+	foo['x']=100;
+	foo['y']=200;
+
+	bar['a']=11;
+	bar['b']=22;
+	bar['c']=33;
+
+	foo.swap(bar);
+
+	std::cout << "foo contains:\n";
+	for (std::map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	std::cout << "bar contains:\n";
+	for (std::map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_clear()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> mymap;
+
+	mymap['x']=100;
+	mymap['y']=200;
+	mymap['z']=300;
+
+	std::cout << "std map contains:\n";
+	for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	mymap.clear();
+	mymap['a']=1101;
+	mymap['b']=2202;
+
+	std::cout << "std map contains:\n";
+	for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_key_comp()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> mymap;
+
+	std::map<char,int>::key_compare mycomp = mymap.key_comp();
+
+	mymap['a']=100;
+	mymap['b']=200;
+	mymap['c']=300;
+
+	std::cout << "mymap contains:\n";
+
+	char highest = mymap.rbegin()->first;     // key value of last element
+
+	std::map<char,int>::iterator it = mymap.begin();
+	do {
+		std::cout << it->first << " => " << it->second << '\n';
+	} while ( mycomp((*it++).first, highest) );
+
+	std::cout << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_value_comp()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> mymap;
+
+	mymap['x']=1001;
+	mymap['y']=2002;
+	mymap['z']=3003;
+
+	std::cout << "std map contains:\n";
+
+	std::pair<char,int> highest = *mymap.rbegin();
+
+	std::map<char,int>::iterator it = mymap.begin();
+	do {
+		std::cout << it->first << " => " << it->second << '\n';
+	} while ( mymap.value_comp()(*it++, highest) );
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_find()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> mymap;
+	std::map<char,int>::iterator it;
+
+	mymap['a']=50;
+	mymap['b']=100;
+	mymap['c']=150;
+	mymap['d']=200;
+
+	it = mymap.find('b');
+	if (it != mymap.end())
+		mymap.erase (it);
+
+	std::cout << "elements in std map:" << '\n';
+	std::cout << "a => " << mymap.find('a')->second << '\n';
+	std::cout << "c => " << mymap.find('c')->second << '\n';
+	std::cout << "d => " << mymap.find('d')->second << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_map_count()
+{
+	unsigned int std_tmp_time =  clock();
+	std::map<char,int> mymap;
+	char c;
+
+	mymap ['a']=101;
+	mymap ['c']=202;
+	mymap ['f']=303;
+
+	for (c='a'; c<'h'; c++)
+	{
+		std::cout << c;
+		if (mymap.count(c) > 0)
+			std::cout << " is an element of std map.\n";
+		else
+			std::cout << " is not an element of std map.\n";
+	}
+	std_end_time += (clock() - std_tmp_time);
 }
 unsigned int std_time()
 {

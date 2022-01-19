@@ -238,7 +238,7 @@ namespace ft
 			m_root = NULL;
 			m_size = 0;
 		}
-		value_compare valuem_comp() const
+		value_compare value_comp() const
 		{
 			return (m_comp);
 		}
