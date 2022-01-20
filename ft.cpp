@@ -857,6 +857,81 @@ void ft_map_count()
 	}
 	ft_end_time += (clock() - ft_tmp_time);
 }
+void ft_map_lower_bound()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator itlow,itup;
+
+	mymap['a']=20;
+	mymap['b']=40;
+	mymap['c']=60;
+	mymap['d']=80;
+	mymap['e']=100;
+
+	itlow=mymap.lower_bound ('b');
+	itup=mymap.upper_bound ('d');
+
+	mymap.erase(itlow,itup);
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_upper_bound()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+	ft::map<char,int>::iterator itlow,itup;
+
+	mymap['a']=20;
+	mymap['b']=40;
+	mymap['c']=60;
+	mymap['d']=80;
+	mymap['e']=100;
+
+	itlow=mymap.lower_bound ('b');
+	itup=mymap.upper_bound ('d');
+
+	mymap.erase(itlow,itup);
+
+	for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_equal_range()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::map<char,int> mymap;
+
+	mymap['a']=10;
+	mymap['b']=20;
+	mymap['c']=30;
+
+	ft::pair<ft::map<char,int>::iterator,ft::map<char,int>::iterator> ret;
+	ret = mymap.equal_range('b');
+
+	std::cout << "lower bound points to: ";
+	std::cout << ret.first->first << " => " << ret.first->second << '\n';
+
+	std::cout << "upper bound points to: ";
+	std::cout << ret.second->first << " => " << ret.second->second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_map_get_allocator()
+{
+	unsigned int ft_tmp_time =  clock();
+	int psize;
+	ft::map<char,int> mymap;
+	ft::pair<const char,int>* p;
+
+	p=mymap.get_allocator().allocate(5);
+	psize = sizeof(ft::map<char,int>::value_type)*5;
+
+	std::cout << "The allocated array has a size of " << psize << " bytes.\n";
+
+	mymap.get_allocator().deallocate(p,5);
+	ft_end_time += (clock() - ft_tmp_time);
+}
 unsigned int ft_time()
 {
 	return (ft_end_time - ft_start_time);

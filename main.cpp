@@ -175,6 +175,10 @@ int main()
 	std_map_upper_bound();
 	ft_map_upper_bound();
 
+	std::cout << "Map upper bound:" << std::endl;
+	std_map_equal_range();
+	ft_map_equal_range();
+
 	unsigned int std_search_time = std_time();
 	unsigned int ft_search_time = ft_time();
 
