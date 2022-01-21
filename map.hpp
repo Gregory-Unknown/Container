@@ -1,5 +1,5 @@
-#ifndef FT_CONTAINERS_MAP_HPP
-#define FT_CONTAINERS_MAP_HPP
+#ifndef MAP_HPP
+#define MAP_HPP
 
 #include <memory>
 #include "rbtree.hpp"

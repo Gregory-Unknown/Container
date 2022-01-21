@@ -84,7 +84,7 @@ namespace ft
 		}
 		RBTree &operator=(const RBTree &other)
 		{
-			if (this == &other) {
+			if (this != &other) {
 				clear();
 				m_alloc = other.m_alloc;
 				m_node_alloc = other.m_node_alloc;
@@ -93,7 +93,6 @@ namespace ft
 				m_size = other.m_size;
 				m_flag = other.m_flag;
 			}
-
 			return (*this);
 		}
 		iterator begin()
@@ -172,7 +171,7 @@ namespace ft
 			return (insert(val).first);
 		}
 		template<typename InputIterator>
-		void insert(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && ft::is_input_iterator_tag<typename InputIterator::iterator_category>::value>::type * = NULL)
+		void insert(InputIterator first, InputIterator last)
 		{
 			while (first != last) {
 				insert(*first);

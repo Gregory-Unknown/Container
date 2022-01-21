@@ -3,6 +3,7 @@
 #include <ctime>
 #include "stack.hpp"
 #include "map.hpp"
+#include "set.hpp"
 
 unsigned int ft_start_time =  clock();
 unsigned int ft_end_time = 0;
@@ -533,7 +534,8 @@ void ft_map_contructor()
 
 	ft::map<char,int> second (first.begin(),first.end());
 
-	ft::map<char,int> third (second);
+	ft::map<char,int> third(second);
+	ft::map<char,int> fourth = third;
 	for (ft::map<char,int>::iterator it = first.begin(); it != first.end(); ++it) {
 		std::cout << "ft " << it->first << " => " << it->second << std::endl;
 	}
@@ -543,6 +545,10 @@ void ft_map_contructor()
 	}
 	std::cout << std::endl;
 	for (ft::map<char,int>::iterator it = third.begin(); it != third.end(); ++it) {
+		std::cout << "ft " << it->first << " => " << it->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (ft::map<char,int>::iterator it = fourth.begin(); it != fourth.end(); ++it) {
 		std::cout << "ft " << it->first << " => " << it->second << std::endl;
 	}
 	std::cout << std::endl;
@@ -930,6 +936,45 @@ void ft_map_get_allocator()
 	std::cout << "The allocated array has a size of " << psize << " bytes.\n";
 
 	mymap.get_allocator().deallocate(p,5);
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_contructor()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> first;
+
+	int myints[]= {10,20,30,40,50};
+	ft::set<int> second (myints, myints+5);
+	first = second;
+
+	ft::set<int> third (second);
+
+	ft::set<int> fourth (second.begin(), second.end());
+	std::cout << "ft " << std::endl;
+	std::cout << "first" << std::endl;
+	for (ft::set<int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "ft " << std::endl;
+	std::cout << "second" << std::endl;
+	for (ft::set<int>::iterator it = second.begin(); it != second.end(); ++it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "ft " << std::endl;
+	std::cout << "third" << std::endl;
+	for (ft::set<int>::iterator it = third.begin(); it != third.end(); ++it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "ft " << std::endl;
+	std::cout << "fourth" << std::endl;
+	for (ft::set<int>::iterator it = fourth.begin(); it != fourth.end(); ++it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+
 	ft_end_time += (clock() - ft_tmp_time);
 }
 unsigned int ft_time()
