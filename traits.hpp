@@ -70,4 +70,4 @@ namespace ft {
 
 }
 
-#endif //FT_CONTAINERS_TYPE_TRAITS_HPP
+#endif

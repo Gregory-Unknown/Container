@@ -4,6 +4,7 @@
 #include <ctime>
 #include <stack>
 #include <map>
+#include <set>
 
 unsigned int std_start_time =  clock();
 unsigned int std_end_time = 0;
@@ -932,6 +933,168 @@ void std_map_get_allocator()
 	std::cout << "The allocated array has a size of " << psize << " bytes.\n";
 
 	mymap.get_allocator().deallocate(p,5);
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_contructor()
+{
+	unsigned int std_tmp_time =  clock();
+
+	std::set<int> first;
+	int myints[]= {10,20,30,40,50};
+	std::set<int> second (myints, myints+5);
+	first = second;
+
+	std::set<int> third (second);
+
+	std::set<int> fourth (second.begin(), second.end());
+	std::cout << "std " << std::endl;
+	std::cout << "first" << std::endl;
+	for (std::set<int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "std " << std::endl;
+	std::cout << "second" << std::endl;
+	for (std::set<int>::iterator it = second.begin(); it != second.end(); ++it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "std " << std::endl;
+	std::cout << "third" << std::endl;
+	for (std::set<int>::iterator it = third.begin(); it != third.end(); ++it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "std " << std::endl;
+	std::cout << "fourth" << std::endl;
+	for (std::set<int>::iterator it = fourth.begin(); it != fourth.end(); ++it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_equal_operator()
+{
+	unsigned int std_tmp_time =  clock();
+
+	int myints[]={ 12,82,37,64,15 };
+	std::set<int> first (myints,myints+5);
+	std::set<int> second;
+
+	second = first;
+	first = std::set<int>();
+
+	std::cout << "std\n";
+	std::cout << "Size of first: " << int (first.size()) << '\n';
+	std::cout << "Size of second: " << int (second.size()) << '\n';
+
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_iterator()
+{
+	unsigned int std_tmp_time =  clock();
+
+	int myints[]= {10,20,30,40,50};
+	std::set<int> first (myints, myints+5);
+
+	std::cout << std::endl;
+
+	for (std::set<int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	std::set<int>::iterator tmp = first.end();
+	--tmp;
+	for (std::set<int>::iterator it = tmp; it != first.begin(); --it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	for (std::set<int>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std::cout << std::endl;
+
+	std::set<int>::reverse_iterator tmp2 = first.rend();
+	--tmp2;
+	for (std::set<int>::reverse_iterator it = tmp2; it != first.rbegin(); --it) {
+		std::cout << "std " << *it << std::endl;
+	}
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_empty()
+{
+	unsigned int std_tmp_time =  clock();
+	std::set<int> myset;
+
+	myset.insert(20);
+	myset.insert(30);
+	myset.insert(10);
+
+	std::cout << "std set contains:";
+	while (!myset.empty())
+	{
+		std::cout << ' ' << *myset.begin();
+		myset.erase(myset.begin());
+	}
+	std::cout << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_size()
+{
+	unsigned int std_tmp_time = clock();
+	std::set<int> myints;
+	std::cout << "std\n";
+	std::cout << "0. size: " << myints.size() << '\n';
+
+	for (int i=0; i<10; ++i) myints.insert(i);
+	std::cout << "1. size: " << myints.size() << '\n';
+
+	myints.insert (100);
+	std::cout << "2. size: " << myints.size() << '\n';
+
+	myints.erase(5);
+	std::cout << "3. size: " << myints.size() << '\n';
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_max_size()
+{
+	unsigned int std_tmp_time =  clock();
+	int i;
+	std::set<int> myset;
+
+	if (myset.max_size()>1000)
+	{
+		for (i=0; i<1000; i++) myset.insert(i);
+		std::cout << "The std set contains 1000 elements.\n";
+	}
+	else std::cout << "The std set could not hold 1000 elements.\n";
+	std_end_time += (clock() - std_tmp_time);
+}
+void std_set_insert()
+{
+	unsigned int std_tmp_time =  clock();
+	std::set<int> myset;
+	std::set<int>::iterator it;
+	std::pair<std::set<int>::iterator,bool> ret;
+
+	for (int i=1; i<=5; ++i) myset.insert(i*10);
+
+	ret = myset.insert(20);
+
+	if (ret.second==false) it=ret.first;
+
+	myset.insert (it,25);
+	myset.insert (it,24);
+	myset.insert (it,26);
+
+	int myints[]= {5,10,15};
+	myset.insert (myints, myints+3);
+
+	std::cout << "std set contains:";
+	for (it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
 	std_end_time += (clock() - std_tmp_time);
 }
 unsigned int std_time()

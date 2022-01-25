@@ -64,6 +64,8 @@
 		"unordered_map": "cpp",
 		"utility": "cpp",
 		"vector": "cpp",
-		"memory_resource": "cpp"
-	}
+		"memory_resource": "cpp",
+		"set": "cpp"
+	},
+	"C_Cpp.errorSquiggles": "Disabled"
 }

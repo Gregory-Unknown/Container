@@ -58,6 +58,7 @@ namespace ft
 		Tree<value_type> *m_end;
 		size_type m_size;
 		int m_flag;
+		RBTree *m_tmp;
 
 		public:
 		RBTree(const value_compare &comp = value_compare(), const allocator_type &alloc = allocator_type(), const node_allocator_type &nodem_alloc = node_allocator_type())
@@ -82,16 +83,20 @@ namespace ft
 			clear();
 			clear(m_end);
 		}
-		RBTree &operator=(const RBTree &other)
+		RBTree &operator=(const RBTree &src)
 		{
-			if (this != &other) {
+			if (this != &src) {
 				clear();
-				m_alloc = other.m_alloc;
-				m_node_alloc = other.m_node_alloc;
-				m_comp = other.m_comp;
-				m_root = clone_tree(other.m_root, NULL);
-				m_size = other.m_size;
-				m_flag = other.m_flag;
+				// clear(m_end);
+				// m_alloc = src.m_alloc;
+				// m_node_alloc = src.m_node_alloc;
+				// m_comp = src.m_comp;
+				// m_end = m_node_alloc.allocate(1);
+				// m_node_alloc.construct(src.m_end, Tree<value_type>(NULL));
+				// m_size = src.m_size;
+				// m_flag = src.m_flag;
+				// m_root = clone_tree(src.m_root, NULL);
+				insert(src.begin(), src.end());
 			}
 			return (*this);
 		}
@@ -323,10 +328,8 @@ namespace ft
 				m_root = node;
 				return (ft::make_pair(node, true));
 			}
-
 			Tree<T> *x = m_root;
 			Tree<T> *y = NULL;
-
 			while (x) {
 				y = x;
 				if (m_comp(*x->value, *node->value))
@@ -336,12 +339,12 @@ namespace ft
 				else
 					return (ft::make_pair(x, false));
 			}
-				node->parent = y;
-				if (m_comp(*y->value, *node->value))
-					y->right = node;
-				else
-					y->left = node;
-				return (ft::make_pair(node, true));
+			node->parent = y;
+			if (m_comp(*y->value, *node->value))
+				y->right = node;
+			else
+				y->left = node;
+			return (ft::make_pair(node, true));
 		}
 		Tree<value_type> *erase_node_alone(Tree<value_type> *node, Tree<value_type> *parent)
 		{

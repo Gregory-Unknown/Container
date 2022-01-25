@@ -106,7 +106,7 @@ namespace ft {
 			return (m_tree.insert(position, val));
 		}
 		template<typename InputIterator>
-		void insert(InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value && ft::is_input_iterator_tag<typename InputIterator::iterator_category>::value>::type * = NULL)
+		void insert(InputIterator first, InputIterator last)
 		{
 			m_tree.insert(first, last);
 		}

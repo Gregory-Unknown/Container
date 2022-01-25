@@ -941,8 +941,8 @@ void ft_map_get_allocator()
 void ft_set_contructor()
 {
 	unsigned int ft_tmp_time =  clock();
-	ft::set<int> first;
 
+	ft::set<int> first;
 	int myints[]= {10,20,30,40,50};
 	ft::set<int> second (myints, myints+5);
 	first = second;
@@ -975,6 +975,132 @@ void ft_set_contructor()
 	}
 	std::cout << std::endl;
 
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_equal_operator()
+{
+	unsigned int ft_tmp_time =  clock();
+
+	int myints[]={ 12,82,37,64,15 };
+	ft::set<int> first (myints,myints+5);
+	ft::set<int> second;
+
+	second = first;
+	first = ft::set<int>();
+
+	std::cout << "ft\n";
+	std::cout << "Size of first: " << int (first.size()) << '\n';
+	std::cout << "Size of second: " << int (second.size()) << '\n';
+
+	ft_end_time += (clock() - ft_tmp_time);
+}
+
+void ft_set_iterator()
+{
+	unsigned int ft_tmp_time =  clock();
+
+	int myints[]= {10,20,30,40,50};
+	ft::set<int> first (myints, myints+5);
+
+	std::cout << std::endl;
+
+	for (ft::set<int>::iterator it = first.begin(); it != first.end(); ++it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	ft::set<int>::iterator tmp = first.end();
+	--tmp;
+	for (ft::set<int>::iterator it = tmp; it != first.begin(); --it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+	for (ft::set<int>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	std::cout << std::endl;
+
+	ft::set<int>::reverse_iterator tmp2 = first.rend();
+	--tmp2;
+	for (ft::set<int>::reverse_iterator it = tmp2; it != first.rbegin(); --it) {
+		std::cout << "ft " << *it << std::endl;
+	}
+	ft_end_time += (clock() - ft_tmp_time);
+}
+
+void ft_set_empty()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+
+	myset.insert(20);
+	myset.insert(30);
+	myset.insert(10);
+
+	std::cout << "ft  set contains:";
+	while (!myset.empty())
+	{
+		std::cout << ' ' << *myset.begin();
+		myset.erase(myset.begin());
+	}
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+
+void ft_set_size()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myints;
+	std::cout << "ft\n";
+	std::cout << "0. size: " << myints.size() << '\n';
+
+	for (int i=0; i<10; ++i) myints.insert(i);
+	std::cout << "1. size: " << myints.size() << '\n';
+
+	myints.insert (100);
+	std::cout << "2. size: " << myints.size() << '\n';
+
+	myints.erase(5);
+	std::cout << "3. size: " << myints.size() << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_max_size()
+{
+	unsigned int ft_tmp_time =  clock();
+	int i;
+	ft::set<int> myset;
+
+	if (myset.max_size()>1000)
+	{
+		for (i=0; i<1000; i++) myset.insert(i);
+		std::cout << "The ft  set contains 1000 elements.\n";
+	}
+	else std::cout << "The ft  set could not hold 1000 elements.\n";
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_insert()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	ft::set<int>::iterator it;
+	ft::pair<ft::set<int>::iterator,bool> ret;
+
+	for (int i=1; i<=5; ++i) myset.insert(i*10);
+
+	ret = myset.insert(20);
+
+	if (ret.second==false) it=ret.first;
+
+	myset.insert (it,25);
+	myset.insert (it,24);
+	myset.insert (it,26);
+
+	int myints[]= {5,10,15};
+	myset.insert (myints, myints+3);
+
+	std::cout << "ft  set contains:";
+	for (it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
 	ft_end_time += (clock() - ft_tmp_time);
 }
 unsigned int ft_time()
