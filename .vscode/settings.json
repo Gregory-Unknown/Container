@@ -65,7 +65,12 @@
 		"utility": "cpp",
 		"vector": "cpp",
 		"memory_resource": "cpp",
-		"set": "cpp"
+		"set": "cpp",
+		"*.tcc": "cpp",
+		"clocale": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"fstream": "cpp"
 	},
 	"C_Cpp.errorSquiggles": "Disabled"
 }

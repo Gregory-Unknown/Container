@@ -1103,6 +1103,218 @@ void ft_set_insert()
 	std::cout << '\n';
 	ft_end_time += (clock() - ft_tmp_time);
 }
+void ft_set_erase()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	ft::set<int>::iterator it;
+	for (int i=1; i<10; i++) myset.insert(i*10);
+	it = myset.begin();
+	++it;
+
+	myset.erase (it);
+
+	myset.erase (40);
+
+	it = myset.find (60);
+	myset.erase (it, myset.end());
+
+	std::cout << "ft set contains:";
+	for (it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_clear()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+
+	myset.insert (100);
+	myset.insert (200);
+	myset.insert (300);
+
+	std::cout << "ft set contains:";
+	for (ft::set<int>::iterator it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	myset.clear();
+	myset.insert (1101);
+	myset.insert (2202);
+
+	std::cout << "ft set contains:";
+	for (ft::set<int>::iterator it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_swap()
+{
+	unsigned int ft_tmp_time =  clock();
+	int myints[]={12,75,10,32,20,25};
+	ft::set<int> first (myints,myints+3);
+	ft::set<int> second (myints+3,myints+6);
+
+	first.swap(second);
+
+	std::cout << "first contains:";
+	for (ft::set<int>::iterator it=first.begin(); it!=first.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+
+	std::cout << "second contains:";
+	for (ft::set<int>::iterator it=second.begin(); it!=second.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_key_comp()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	int highest;
+
+	ft::set<int>::key_compare mycomp = myset.key_comp();
+
+	for (int i=0; i<=5; i++) myset.insert(i);
+
+	std::cout << "ft set contains:";
+
+	highest=*myset.rbegin();
+	ft::set<int>::iterator it=myset.begin();
+	do {
+		std::cout << ' ' << *it;
+	} while ( mycomp(*(++it),highest) );
+
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_value_comp()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+
+	ft::set<int>::value_compare mycomp = myset.value_comp();
+
+	for (int i=0; i<=5; i++) myset.insert(i);
+
+	std::cout << "ft set contains:";
+
+	int highest=*myset.rbegin();
+	ft::set<int>::iterator it=myset.begin();
+	do {
+		std::cout << ' ' << *it;
+	} while ( mycomp(*(++it),highest) );
+
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_find()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	ft::set<int>::iterator it;
+
+	for (int i=1; i<=5; i++) myset.insert(i*10);
+
+	it=myset.find(20);
+	myset.erase (it);
+	myset.erase (myset.find(40));
+
+	std::cout << "ft set contains:";
+	for (it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_count()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+
+	for (int i=1; i<5; ++i) myset.insert(i*3);
+
+	for (int i=0; i<10; ++i)
+	{
+		std::cout << i;
+		if (myset.count(i)!=0)
+			std::cout << " is an element of ft set.\n";
+		else
+			std::cout << " is not an element of ft set.\n";
+	}
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_lower_bound()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	ft::set<int>::iterator itlow,itup;
+
+	for (int i=1; i<10; i++) myset.insert(i*10);
+
+	itlow=myset.lower_bound (30);
+	itup=myset.upper_bound (60);
+
+	myset.erase(itlow,itup);
+
+	std::cout << "ft set contains:";
+	for (ft::set<int>::iterator it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_upper_bound()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	ft::set<int>::iterator itlow,itup;
+
+	for (int i=1; i<10; i++) myset.insert(i*10);
+
+	itlow=myset.lower_bound (30);
+	itup=myset.upper_bound (60);
+
+	myset.erase(itlow,itup);
+
+	std::cout << "ft set contains:";
+	for (ft::set<int>::iterator it=myset.begin(); it!=myset.end(); ++it)
+		std::cout << ' ' << *it;
+	std::cout << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_equal_range()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+
+	for (int i=1; i<=5; i++) myset.insert(i*10);   // myset: 10 20 30 40 50
+
+	ft::pair<ft::set<int>::const_iterator,ft::set<int>::const_iterator> ret;
+	ret = myset.equal_range(30);
+
+	std::cout << "ft the lower bound points to: " << *ret.first << '\n';
+	std::cout << "ft the upper bound points to: " << *ret.second << '\n';
+	ft_end_time += (clock() - ft_tmp_time);
+}
+void ft_set_get_allocator()
+{
+	unsigned int ft_tmp_time =  clock();
+	ft::set<int> myset;
+	int * p;
+	unsigned int i;
+
+	p=myset.get_allocator().allocate(5);
+
+	for (i=0; i<5; i++) p[i]=(i+1)*10;
+
+	std::cout << "The allocated ft array contains:";
+	for (i=0; i<5; i++) std::cout << ' ' << p[i];
+	std::cout << '\n';
+
+	myset.get_allocator().deallocate(p,5);
+	ft_end_time += (clock() - ft_tmp_time);
+}
 unsigned int ft_time()
 {
 	return (ft_end_time - ft_start_time);

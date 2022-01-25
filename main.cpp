@@ -8,9 +8,6 @@
 
 int main()
 {
-	unsigned int std_start_time = clock();
-	// unsigned int ft_start_time = clock();
-
 	std::cout << "ft_vector" << std::endl;
 	std::cout << "Constructor" << std::endl;
 	std_constructor();
@@ -180,92 +177,94 @@ int main()
 	std_map_upper_bound();
 	ft_map_upper_bound();
 
-	std::cout << "Map upper bound:" << std::endl;
+	std::cout << "Map equal range:" << std::endl;
 	std_map_equal_range();
 	ft_map_equal_range();
 
+	std::cout << "map get allocator:" << std::endl;
+	std_map_get_allocator();
+	ft_map_get_allocator();
 
-	// std::cout << "set contructor :" << std::endl;
-	// std_set_contructor();
-	// ft_set_contructor();
+	std::cout << "set" << std::endl;
 
-	// std::cout << "set equal operator :" << std::endl;
-	// std_set_equal_operator();
-	// ft_set_equal_operator();
+	std::cout << "set contructor :" << std::endl;
+	std_set_contructor();
+	ft_set_contructor();
 
-	// std::cout << "set iterator :" << std::endl;
-	// std_set_iterator();
-	// ft_set_iterator();
+	std::cout << "set equal operator :" << std::endl;
+	std_set_equal_operator();
+	ft_set_equal_operator();
 
-	// std::cout << "set empty :" << std::endl;
-	// std_set_empty();
-	// ft_set_empty();
+	std::cout << "set iterator :" << std::endl;
+	std_set_iterator();
+	ft_set_iterator();
 
-	// std::cout << "set size :" << std::endl;
-	// std_set_size();
-	// ft_set_size();
+	std::cout << "set empty :" << std::endl;
+	std_set_empty();
+	ft_set_empty();
 
-	// std::cout << "set max size :" << std::endl;
-	// std_set_max_size();
-	// ft_set_max_size();
+	std::cout << "set size :" << std::endl;
+	std_set_size();
+	ft_set_size();
 
-	// std::cout << "set insert:" << std::endl;
-	// std_set_insert();
-	// ft_set_insert();
+	std::cout << "set max size :" << std::endl;
+	std_set_max_size();
+	ft_set_max_size();
 
-	// std::cout << "set erase:" << std::endl;
-	// std_set_erase();
-	// ft_set_erase();
+	std::cout << "set insert:" << std::endl;
+	std_set_insert();
+	ft_set_insert();
 
-	// std::cout << "set clear:" << std::endl;
-	// std_set_clear();
-	// ft_set_clear();
+	std::cout << "set erase:" << std::endl;
+	std_set_erase();
+	ft_set_erase();
 
-	// std::cout << "set key comp:" << std::endl;
-	// std_set_key_comp();
-	// ft_set_key_comp();
+	std::cout << "set swap:" << std::endl;
+	std_set_swap();
+	ft_set_swap();
 
-	// std::cout << "set value comp:" << std::endl;
-	// std_set_value_comp();
-	// ft_set_value_comp();
+	std::cout << "set clear:" << std::endl;
+	std_set_clear();
+	ft_set_clear();
 
-	// std::cout << "set find:" << std::endl;
-	// std_set_find();
-	// ft_set_find();
+	std::cout << "set key comp:" << std::endl;
+	std_set_key_comp();
+	ft_set_key_comp();
 
-	// std::cout << "set count:" << std::endl;
-	// std_set_count();
-	// ft_set_count();
+	std::cout << "set value comp:" << std::endl;
+	std_set_value_comp();
+	ft_set_value_comp();
 
-	// std::cout << "set lower bound:" << std::endl;
-	// std_set_lower_bound();
-	// ft_set_lower_bound();
+	std::cout << "set find:" << std::endl;
+	std_set_find();
+	ft_set_find();
 
-	// std::cout << "set upper bound:" << std::endl;
-	// std_set_upper_bound();
-	// ft_set_upper_bound();
+	std::cout << "set count:" << std::endl;
+	std_set_count();
+	ft_set_count();
 
-	// std::cout << "set upper bound:" << std::endl;
-	// std_set_equal_range();
-	// ft_set_equal_range();
-	// usleep(3000000);
-	// unsigned int std_search_time = std_time();
-	// unsigned int ft_search_time = ft_time();
+	std::cout << "set lower bound:" << std::endl;
+	std_set_lower_bound();
+	ft_set_lower_bound();
 
-	// std::cout << "TIME "<< std::endl;
+	std::cout << "set upper bound:" << std::endl;
+	std_set_upper_bound();
+	ft_set_upper_bound();
 
-	// std::cout << "STD_TIME " << std_search_time << std::endl;
-	// std::cout << "FT_TIME  " << ft_search_time << std::endl;
-	// std::cout << "RESULT " << ft_search_time / std_search_time << std::endl;
-	// for(unsigned long long int i = 0; i < 10000000000; i++) ;
-	unsigned int std_finish_time = clock() - std_start_time;
-	// unsigned int ft_finish_time = clock() - ft_start_time;
+	std::cout << "set equal range:" << std::endl;
+	std_set_equal_range();
+	ft_set_equal_range();
+
+	std::cout << "set get allocator:" << std::endl;
+	std_set_get_allocator();
+	ft_set_get_allocator();
+
+	unsigned int std_search_time = std_time();
+	unsigned int ft_search_time = ft_time();
 
 	std::cout << "TIME "<< std::endl;
 
-	std::cout << "AAAAA " << std_finish_time << std::endl;
-	// std::cout << "BBBBB  " << ft_finish_time << std::endl;
-	// std::cout << "CCCCC " << ft_finish_time / std_finish_time << std::endl;
-
-
+	std::cout << "STD_TIME " << std_search_time << std::endl;
+	std::cout << "FT_TIME  " << ft_search_time << std::endl;
+	std::cout << "RESULT " << ft_search_time / std_search_time << std::endl;
 }

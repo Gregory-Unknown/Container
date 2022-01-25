@@ -132,7 +132,7 @@ namespace ft {
 		}
 		key_compare key_comp() const
 		{
-			return (m_tree.value_comp()._comp);
+			return (m_tree.value_comp());
 		}
 		value_compare value_comp() const
 		{

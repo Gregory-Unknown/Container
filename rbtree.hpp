@@ -265,27 +265,27 @@ namespace ft
 		}
 		const_iterator lower_bound(const value_type &val) const
 		{
-			m_flag = 1;
+			setFlag(1);
 			return (const_iterator(lower_bound_tree(val, m_root)));
 		}
 		iterator upper_bound(const value_type &val)
 		{
-			m_flag = 1;
+			setFlag(1);
 			return (iterator(upper_bound_tree(val, m_root)));
 		}
 		const_iterator upper_bound(const value_type &val) const
 		{
-			m_flag = 1;
+			setFlag(1);
 			return (const_iterator(upper_bound_tree(val, m_root)));
 		}
 		pair<iterator, iterator> equal_range(const value_type &val)
 		{
-			m_flag = 1;
+			setFlag(1);
 			return (ft::make_pair(lower_bound(val), upper_bound(val)));
 		}
 		pair<const_iterator, const_iterator> equal_range(const value_type &val) const
 		{
-			m_flag = 1;
+			setFlag(1);
 			return (ft::make_pair(lower_bound(val), upper_bound(val)));
 		}
 		allocator_type get_allocator() const
@@ -538,6 +538,10 @@ namespace ft
 				}
 			}
 			m_root->color = false;
+		}
+		void setFlag(int f)
+		{
+			m_flag = f;
 		}
 	};
 
