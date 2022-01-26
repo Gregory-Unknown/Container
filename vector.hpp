@@ -2,7 +2,6 @@
 #define VECTOR_HPP
 
 #include "vector_iterator.hpp"
-// #include "Iterator.hpp"
 #include <memory>
 #include <stdexcept>
 #include <exception>
@@ -182,16 +181,6 @@ namespace ft {
 					m_alloc.destroy(m_data + i);
 				}
 				m_alloc.deallocate(m_data, m_capacity);
-				// try {
-				// 	std::uninitialized_copy(m_data, m_data + m_size, newdata);
-				// } catch (...) {
-				// 	m_alloc.deallocate(newdata, n);
-				// 	throw;
-				// }
-				// for (size_type i = 0; i < m_size; ++i) {
-				// 	m_alloc.destroy(m_data + i);
-				// }
-				// m_alloc.deallocate(m_data, m_capacity);
 				m_data = newdata;
 				m_capacity = n;
 			}
