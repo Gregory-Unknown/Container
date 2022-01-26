@@ -9,7 +9,6 @@ namespace ft {
 	template<typename T, typename Pointer, typename Reference>
 	class rb_tree_iterator {
 		Tree<T> *m_p;
-
 	public:
 		typedef T							value_type;
 		typedef ptrdiff_t					difference_type;
@@ -111,7 +110,5 @@ namespace ft {
 	bool operator!=(const rb_tree_iterator<T, LPointer, LReference> &lhs, const rb_tree_iterator<T, RPointer, RReference> &rhs) {
 		return (!(lhs == rhs));
 	}
-
-	}
-
-	#endif //FT_CONTAINERS_RB_TREE_ITERATOR_HPP
+}
+#endif

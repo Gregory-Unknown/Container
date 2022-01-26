@@ -21,23 +21,20 @@ namespace ft {
 	private:
 		class value_compare {
 			friend class map;
+			protected:
+				key_compare _comp;
+				explicit value_compare(Compare c) : _comp(c)
+				{
 
-		protected:
-			key_compare _comp;
-			explicit value_compare(Compare c) : _comp(c)
-			{
-
-			}
-
-		public:
-			typedef bool		result_type;
-			typedef value_type	first_argument_type;
-			typedef value_type	second_argument_type;
-
-			bool operator()(const value_type &x, const value_type &y) const
-			{
-				return (_comp(x.first, y.first));
-			}
+				}
+			public:
+				typedef bool		result_type;
+				typedef value_type	first_argument_type;
+				typedef value_type	second_argument_type;
+				bool operator()(const value_type &x, const value_type &y) const
+				{
+					return (_comp(x.first, y.first));
+				}
 		};
 
 		RBTree<value_type, value_compare, allocator_type> m_tree;

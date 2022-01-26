@@ -87,15 +87,6 @@ namespace ft
 		{
 			if (this != &src) {
 				clear();
-				// clear(m_end);
-				// m_alloc = src.m_alloc;
-				// m_node_alloc = src.m_node_alloc;
-				// m_comp = src.m_comp;
-				// m_end = m_node_alloc.allocate(1);
-				// m_node_alloc.construct(src.m_end, Tree<value_type>(NULL));
-				// m_size = src.m_size;
-				// m_flag = src.m_flag;
-				// m_root = clone_tree(src.m_root, NULL);
 				insert(src.begin(), src.end());
 			}
 			return (*this);
