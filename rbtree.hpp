@@ -461,38 +461,6 @@ namespace ft
 				return (left != m_end ? left : node);
 			}
 		}
-		void rotate_left(Tree<value_type> *node)
-		{
-			Tree<value_type> *right = node->right;
-			node->right = right->left;
-			if (node->right)
-				node->right->parent = node;
-			right->parent = node->parent;
-			if (!node->parent)
-				m_root = right;
-			else if (node == node->parent->left)
-				node->parent->left = right;
-			else
-				node->parent->right = right;
-			right->left = node;
-			node->parent = right;
-		}
-		void rotate_right(Tree<value_type> *node)
-		{
-			Tree<value_type> *left = node->left;
-			node->left = left->right;
-			if (node->left)
-				node->left->parent = node;
-			left->parent = node->parent;
-			if (!node->parent)
-				m_root = left;
-			else if (node == node->parent->left)
-				node->parent->left = left;
-			else
-				node->parent->right = left;
-			left->right = node;
-			node->parent = left;
-		}
 		void balance_tree(Tree<value_type> *node)
 		{
 			Tree<value_type> *parent;
@@ -510,11 +478,35 @@ namespace ft
 						node = grandparent;
 					} else {
 						if (node == parent->right) {
-							rotate_left(parent);
+							Tree<value_type> *right = parent->right;
+							parent->right = right->left;
+							if (parent->right)
+								parent->right->parent = node;
+							right->parent = parent->parent;
+							if (!parent->parent)
+								m_root = right;
+							else if (parent == parent->parent->left)
+								parent->parent->left = right;
+							else
+								parent->parent->right = right;
+							right->left = parent;
+							parent->parent = right;
 							node = parent;
 							parent = node->parent;
 						}
-						rotate_right(grandparent);
+						Tree<value_type> *left = grandparent->left;
+						grandparent->left = left->right;
+						if (grandparent->left)
+							grandparent->left->parent = grandparent;
+						left->parent = grandparent->parent;
+						if (!grandparent->parent)
+							m_root = left;
+						else if (grandparent == grandparent->parent->left)
+							grandparent->parent->left = left;
+						else
+							grandparent->parent->right = left;
+						left->right = grandparent;
+						grandparent->parent = left;
 						ft::swap(parent->color, grandparent->color);
 						node = parent;
 					}
@@ -527,11 +519,35 @@ namespace ft
 						node = grandparent;
 					} else {
 						if (node == parent->left) {
-							rotate_right(parent);
+							Tree<value_type> *left = parent->left;
+							parent->left = left->right;
+							if (parent->left)
+								parent->left->parent = parent;
+							left->parent = parent->parent;
+							if (!parent->parent)
+								m_root = left;
+							else if (parent == parent->parent->left)
+								parent->parent->left = left;
+							else
+								parent->parent->right = left;
+							left->right = parent;
+							parent->parent = left;
 							node = parent;
 							parent = node->parent;
 						}
-						rotate_left(grandparent);
+						Tree<value_type> *right = grandparent->right;
+						grandparent->right = right->left;
+						if (grandparent->right)
+							grandparent->right->parent = grandparent;
+						right->parent = grandparent->parent;
+						if (!grandparent->parent)
+							m_root = right;
+						else if (grandparent == grandparent->parent->left)
+							grandparent->parent->left = right;
+						else
+							grandparent->parent->right = right;
+						right->left = grandparent;
+						grandparent->parent = right;
 						ft::swap(parent->color, grandparent->color);
 						node = parent;
 					}
