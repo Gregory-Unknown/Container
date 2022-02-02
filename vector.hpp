@@ -258,7 +258,7 @@ namespace ft {
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
-				difference_type tmp = position - begin();
+				size_type tmp = position - begin();
 				if (tmp < 0 || n == 0) return ;
 				if (m_capacity < m_size + n) {
 					if (m_size * 2 > m_size + n)
@@ -266,7 +266,6 @@ namespace ft {
 					else
 						reserve(m_size + n);
 				}
-					// reserve(std::max(m_size * 2, m_size + n));
 				position = begin() + tmp;
 				for (iterator iter = end() + n - 1; iter >= position + n; --iter) {
 					m_alloc.construct(iter.geter(), *(iter - n));
@@ -303,17 +302,14 @@ namespace ft {
 				if (m_size == 0) {
 					return iterator(m_data + index);
 				}
-
 				m_alloc.destroy(m_data + index);
 				--m_size;
-				memmove
-				(m_data + index, m_data + index + 1, sizeof(value_type) * (m_size - index));
+				memmove(m_data + index, m_data + index + 1, sizeof(value_type) * (m_size - index));
 				return iterator(m_data + index);
 			}
 			iterator erase (iterator first, iterator last)
 			{
 				size_type start = first - this->begin();
-
 				while (first != last) {
 					erase(first);
 					--last;

@@ -13,37 +13,37 @@ namespace ft {
 		typedef size_t    size_type;
 
 	protected:
-		container_type m_ctnr;
+		container_type c;
 
 	public:
-		explicit stack(const container_type &ctnr = container_type()) : m_ctnr(ctnr)
+		explicit stack(const container_type &ctnr = container_type()) : c(ctnr)
 		{
 
 		}
 		~stack() {}
 		bool empty() const
 		{
-			return (m_ctnr.empty());
+			return (c.empty());
 		}
 		size_type size() const
 		{
-			return (m_ctnr.size());
+			return (c.size());
 		}
 		value_type &top()
 		{
-			return (m_ctnr.back());
+			return (c.back());
 		}
 		const value_type &top() const
 		{
-			return (m_ctnr.back());
+			return (c.back());
 		}
 		void push(const value_type &val)
 		{
-			m_ctnr.push_back(val);
+			c.push_back(val);
 		}
 		void pop()
 		{
-			m_ctnr.pop_back();
+			c.pop_back();
 		}
 		// friend bool operator==(const stack<T, Container> &l, const stack<T, Container> &r) {
 		//     return (l.ctnr == r.ctnr);
@@ -73,32 +73,32 @@ namespace ft {
 	template <class T, class Container>
 	bool operator== (const stack<T,Container>& l, const stack<T,Container>& r)
 	{
-		return (l.m_ctnr == r.m_ctnr);
+		return (l.c == r.c);
 	}
 	template <class T, class Container>
 	bool operator!= (const stack<T,Container>& l, const stack<T,Container>& r)
 	{
-		return (l.m_ctnr != r.m_ctnr);
+		return (l.c != r.c);
 	}
 	template <class T, class Container>
 	bool operator< (const stack<T,Container>& l, const stack<T,Container>& r)
 	{
-		return (l.m_ctnr < r.m_ctnr);
+		return (l.c < r.c);
 	}
 	template <class T, class Container>
 	bool operator<= (const stack<T,Container>& l, const stack<T,Container>& r)
 	{
-		return (l.m_ctnr <= r.m_ctnr);
+		return (l.c <= r.c);
 	}
 	template <class T, class Container>
 	bool operator>  (const stack<T,Container>& l, const stack<T,Container>& r)
 	{
-		return (l.m_ctnr > r.m_ctnr);
+		return (l.c > r.c);
 	}
 	template <class T, class Container>
 	bool operator>= (const stack<T,Container>& l, const stack<T,Container>& r)
 	{
-		return (l.m_ctnr >= r.m_ctnr);
+		return (l.c >= r.c);
 	}
 }
 
